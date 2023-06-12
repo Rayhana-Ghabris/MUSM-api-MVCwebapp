@@ -4,6 +4,7 @@ using MUSM_api_MVCwebapp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MUSM_api_MVCwebapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+<<<<<<<< HEAD:MUSM-api-MVCwebapp/Migrations/20230612170849_FirstMigrto.Designer.cs
+    [Migration("20230612170849_FirstMigrto")]
+    partial class FirstMigrto
+========
+    [Migration("20230612171232_FirstMigration")]
+    partial class FirstMigration
+>>>>>>>> f549a543730965f154f2b2c4be23550e990ac183:MUSM-api-MVCwebapp/Migrations/20230612171232_FirstMigration.Designer.cs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
