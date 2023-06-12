@@ -167,7 +167,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                     Location = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Category = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    PublicUserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    PublicUserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -196,8 +196,8 @@ namespace MUSM_api_MVCwebapp.Migrations
                     Category = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DateCompleted = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    WorkerId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    RequestId = table.Column<int>(type: "int", nullable: false),
+                    WorkerId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
+                    RequestId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -305,7 +305,8 @@ namespace MUSM_api_MVCwebapp.Migrations
                 name: "IX_Tasks_RequestId",
                 table: "Tasks",
                 column: "RequestId",
-                unique: true);
+                unique: true,
+                filter: "[RequestId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_WorkerId",
