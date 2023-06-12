@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MUSM_api_MVCwebapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230612170849_FirstMigrto")]
-    partial class FirstMigrto
+    [Migration("20230611152936_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -286,6 +286,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PublicUserId")
+                        .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
@@ -345,7 +346,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("RequestId")
+                    b.Property<int>("RequestId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -353,14 +354,14 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("WorkerId")
+                        .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RequestId")
-                        .IsUnique()
-                        .HasFilter("[RequestId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("WorkerId");
 
@@ -439,7 +440,8 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasOne("MUSM_api_MVCwebapp.Data.AppUser", "PublicUser")
                         .WithMany("Requests")
                         .HasForeignKey("PublicUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("PublicUser");
                 });
@@ -449,12 +451,14 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasOne("MUSM_api_MVCwebapp.Models.RequestModel", "Request")
                         .WithOne("Task")
                         .HasForeignKey("MUSM_api_MVCwebapp.Models.TaskModel", "RequestId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("MUSM_api_MVCwebapp.Data.AppUser", "Worker")
                         .WithMany("Tasks")
                         .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Request");
 

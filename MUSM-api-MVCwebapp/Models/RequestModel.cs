@@ -28,6 +28,7 @@ namespace MUSM_api_MVCwebapp.Models
         [StringLength(256, ErrorMessage = "Maximum length for title is {1}")]
         public string? Category { get; set; }
 
+   
         [StringLength(450, ErrorMessage = "Maximum length for title is {1}")]
         public string? PublicUserId { get; set; }
         [Display(Name = "Public User")]
