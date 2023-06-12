@@ -35,7 +35,6 @@ namespace MUSM_api_MVCwebapp.Models
 
         public DateTime? DateCompleted { get; set; }
 
-        [Required]
         [StringLength(450, ErrorMessage = "Maximum length for title is {1}")]
         public string? WorkerId { get; set; }
         [Display(Name = "Worker")]
@@ -43,10 +42,8 @@ namespace MUSM_api_MVCwebapp.Models
         [ForeignKey("WorkerId")]
         public AppUser? Worker { get; set; }
 
-
-        [Required]
         [Range(0, 1000000000)]
-        public int RequestId { get; set; }
+        public int? RequestId { get; set; }
 
         [ForeignKey("RequestId")]
         public RequestModel? Request { get; set; }

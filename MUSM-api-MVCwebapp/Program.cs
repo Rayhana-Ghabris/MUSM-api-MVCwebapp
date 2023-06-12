@@ -1,8 +1,12 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Helpers;
+using System.Configuration;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +37,51 @@ builder.Services.AddDefaultIdentity<AppUser>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// Add services to the container.
+//Get strongly typed settings from "appsettings.json"
+
+var appSettingsSection = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppSettings>(appSettingsSection);
+
+//creating a variable holding all the settings from appSettingsSection
+
+var appSettings = appSettingsSection.Get<AppSettings>();
+
+//Get the key for the JWT Token
+
+var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+//Add Authentication Service: Configure how the server will validate the JWT recieved in HTTP request header
+ 
+builder.Services.AddAuthentication(o =>
+{
+    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = appSettings.Site,
+        ValidAudience = appSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+//Policies Configuration
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireLoggedIn", policy => policy.RequireRole("Manager", "Worker","PublicUser").RequireAuthenticatedUser());
+    options.AddPolicy("RequireManagerOrPublicUserRole", policy => policy.RequireRole("Manager","PublicUser").RequireAuthenticatedUser());
+    options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Manager").RequireAuthenticatedUser());
+    options.AddPolicy("RequireWorkerRole", policy => policy.RequireRole("Worker").RequireAuthenticatedUser());
+    options.AddPolicy("RequirePublicUserRole", policy => policy.RequireRole("PublicUser").RequireAuthenticatedUser());
+});
+
 builder.Services.AddControllersWithViews();
 
 // Add Mapper service

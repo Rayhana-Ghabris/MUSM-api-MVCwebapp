@@ -27,6 +27,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
 
         [HttpGet("[action]/{withDeleted}")]
+        [Authorize(Policy = "RequireManagerOrPublicUserRole")]
         public async Task<ActionResult> GetRequests([FromRoute] bool withDeleted)
         {
             List<RequestModel>? requestsList = null;
@@ -48,14 +49,14 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Ok(requestsList);
         }
 
-        //URL: https://localhost:7058/api/requestsapi/CreateRequest/id
-        [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> CreateRequest([FromRoute] string id, [FromBody] RequestDto data)
+        //URL: https://localhost:7058/api/requestsapi/CreateRequest
+        [HttpPost("[action]")]
+        [Authorize(Policy = "RequirePublicUserRole")]
+        public async Task<IActionResult> CreateRequest([FromBody] RequestDto data)
         {
             RequestModel request = _mapper.Map<RequestModel>(data);
 
-            //request.PublicUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            request.PublicUserId = id;
+            request.PublicUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var createRequest = await _db.Requests.AddAsync(request);
 
