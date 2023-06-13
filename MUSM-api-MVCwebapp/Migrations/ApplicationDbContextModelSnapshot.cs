@@ -344,6 +344,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<int?>("RequestId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -357,8 +358,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RequestId")
-                        .IsUnique()
-                        .HasFilter("[RequestId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("WorkerId");
 
@@ -447,7 +447,8 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasOne("MUSM_api_MVCwebapp.Models.RequestModel", "Request")
                         .WithOne("Task")
                         .HasForeignKey("MUSM_api_MVCwebapp.Models.TaskModel", "RequestId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("MUSM_api_MVCwebapp.Data.AppUser", "Worker")
                         .WithMany("Tasks")

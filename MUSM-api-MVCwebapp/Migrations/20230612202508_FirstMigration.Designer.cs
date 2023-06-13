@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MUSM_api_MVCwebapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230611152936_FirstMigration")]
+    [Migration("20230612202508_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -286,7 +286,6 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PublicUserId")
-                        .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
@@ -346,7 +345,8 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("RequestId")
+                    b.Property<int?>("RequestId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -354,7 +354,6 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("WorkerId")
-                        .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
@@ -440,8 +439,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasOne("MUSM_api_MVCwebapp.Data.AppUser", "PublicUser")
                         .WithMany("Requests")
                         .HasForeignKey("PublicUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("PublicUser");
                 });
@@ -457,8 +455,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasOne("MUSM_api_MVCwebapp.Data.AppUser", "Worker")
                         .WithMany("Tasks")
                         .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Request");
 

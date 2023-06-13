@@ -44,7 +44,7 @@ namespace MUSM_api_MVCwebapp.Models
         public AppUser? Worker { get; set; }
 
 
-        [Required]
+        
         [Range(0, 1000000000)]
         public int? RequestId { get; set; }
 

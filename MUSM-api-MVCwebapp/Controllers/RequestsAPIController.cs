@@ -7,14 +7,15 @@ using MUSM_api_MVCwebapp.Dtos;
 using MUSM_api_MVCwebapp.Models;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace MUSM_api_MVCwebapp.Controllers
-{   
+{
     [Route("api/[controller]")]
     [ApiController]
 
-    public class RequestsAPIController:ControllerBase
+    public class RequestsAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
 
@@ -25,34 +26,148 @@ namespace MUSM_api_MVCwebapp.Controllers
             _db = context;
             _mapper = mapper;
         }
-
-        [HttpGet("[action]/{withDeleted}")]
-        [Authorize(Policy = "RequireManagerOrPublicUserRole")]
-        public async Task<ActionResult> GetRequests([FromRoute] bool withDeleted)
+        //TODO
+        [HttpGet("[action]")]
+        [Authorize(Policy = "RequirePublicUserRole")]
+        public async Task<ActionResult> GetRequests([FromQuery] string categorySearch, [FromQuery] string locationSearch, [FromQuery] string keyword)
         {
             List<RequestModel>? requestsList = null;
 
-            if (withDeleted == true){
+            var result = _db.Requests
+              .Where(request => request.Deleted == false)
+              .Where(request => request.Category.Equals(categorySearch))
+              .Where(request => request.Location.Equals(locationSearch))
+              .Where(request => request.Description.Contains(keyword) || request.Title.Contains(keyword));
 
-                requestsList = await _db.Requests
-                    .ToListAsync();
-            }
-            else
+
+             /*if (!String.IsNullOrEmpty(categorySearch) )
+             {  
+              
+                 result.Where(request => request.Category.Equals(categorySearch));
+             }
+
+             if (!String.IsNullOrEmpty(locationSearch))
             {
-                requestsList = await _db.Requests
-                    .Where(request => request.Deleted == false)
-                    .ToListAsync();
-            }
+                 result.Where(request => request.Location.Equals(locationSearch));
+             }
+
+             if (!String.IsNullOrEmpty(keyword))
+            {
+                 result.Where(request => request.Description.Contains(keyword) || request.Title.Contains(keyword));
+             }
+             */
+            requestsList = result.ToList();
 
             if (requestsList == null || requestsList.Count() <= 0) return NotFound(new JsonResult("No Requests existed."));
 
             return Ok(requestsList);
         }
 
-        //URL: https://localhost:7058/api/requestsapi/CreateRequest
+
+        //GetRequest([route]id)*
+        [HttpGet("[action]/{id}")]
+        [Authorize(Policy = "RequirePublicUserRole")]
+        public async Task<ActionResult> GetMyRequests([FromRoute] string id)
+        {
+
+            var requestsList = _db.Requests
+                .Where(request => request.PublicUserId.Equals(id));
+
+            if (requestsList == null || requestsList.Count() <= 0) return NotFound(new JsonResult("No Requests existed."));
+
+            return Ok(requestsList);
+
+        }
+
+
+        //GetRequestCompletionStatus([route]idofrequest)
+        [HttpGet("[action]/{id}")]
+        [Authorize(Policy = "RequirePublicUserRole")]
+        public ActionResult GetRequestCompletionStatus([FromRoute] int id)
+        {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+            var task = _db.Tasks
+                .Where(task => task.RequestId == id)
+                .FirstOrDefault();
+
+            if (task == null) return NotFound();
+
+            return Ok(task.CompletionStatus);
+
+
+        }
+
+
+        //change createRequest-->PostRequest*
+        //UpdateRequest([route]idofrequest, [body]updatedrequest)
+        [HttpPut("[action]/{id}")]
+        [Authorize(Policy = "RequirePublicUserRole")]
+        public async Task<ActionResult> UpdateRequest([FromRoute] int id, [FromBody] RequestDto data)
+        {
+
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            var request =  await _db.Requests
+               .FindAsync(id);
+
+            if (request == null) return NotFound();
+
+            // If the request was found
+            request.Title = data.Title;
+            request.Description = data.Description;
+            request.Photo = data.Photo;
+            request.Location = data.Location;
+            request.Category = data.Category;
+         
+            _db.Entry(request).State = EntityState.Modified;
+
+            await _db.SaveChangesAsync();
+
+            return Ok("Successfully updated");
+
+        }
+
+
+
+        //DeleteRequest([route]idofrequest) deleted=true
+        [HttpDelete("[action]/{id}")]
+        [Authorize(Policy = "RequirePublicUserRole")]
+        public async Task<ActionResult> DeleteRequest([FromRoute] int id)
+        {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            var request = await _db.Requests
+              .FindAsync(id);           
+
+
+            if (request == null) return NotFound();
+                request.Deleted = true;
+
+            _db.Entry(request).State = EntityState.Modified;
+
+            await _db.SaveChangesAsync();
+
+            return Ok("Successfully deleted");
+
+        }
+
+
+
+
+
+        //URL: https://localhost:7058/api/requestsapi/PostRequest
         [HttpPost("[action]")]
         [Authorize(Policy = "RequirePublicUserRole")]
-        public async Task<IActionResult> CreateRequest([FromBody] RequestDto data)
+        public async Task<ActionResult> PostRequest([FromBody] RequestDto data)
         {
             RequestModel request = _mapper.Map<RequestModel>(data);
 
