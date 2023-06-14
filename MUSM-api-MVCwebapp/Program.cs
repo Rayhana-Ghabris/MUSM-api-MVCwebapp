@@ -52,7 +52,7 @@ var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
 //Add Authentication Service: Configure how the server will validate the JWT recieved in HTTP request header
  
-builder.Services.AddAuthentication(o =>
+/*builder.Services.AddAuthentication(o =>
 {
     o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     o.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,7 +69,7 @@ builder.Services.AddAuthentication(o =>
         ValidAudience = appSettings.Audience,
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
-});
+});*/
 
 //Policies Configuration
 
