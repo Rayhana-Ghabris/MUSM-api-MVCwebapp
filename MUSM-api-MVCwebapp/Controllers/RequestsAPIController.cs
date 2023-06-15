@@ -116,7 +116,13 @@ namespace MUSM_api_MVCwebapp.Controllers
             var request =  await _db.Requests
                .FindAsync(id);
 
-            if (request == null) return NotFound();
+            if (!request.PublicUserId.Equals(User.FindFirst(ClaimTypes.NameIdentifier).Value) 
+                || request == null)
+            {
+                return NotFound();
+            }
+
+            
 
             // If the request was found
             request.Title = data.Title;
@@ -149,7 +155,11 @@ namespace MUSM_api_MVCwebapp.Controllers
               .FindAsync(id);           
 
 
-            if (request == null) return NotFound();
+            if (!request.PublicUserId.Equals(User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                 || request == null)
+            {
+                return NotFound();
+            }
                 request.Deleted = true;
 
             _db.Entry(request).State = EntityState.Modified;

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MUSM_api_MVCwebapp.Models.TaskModel>
+﻿@model IEnumerable<MUSM_api_MVCwebapp.Models.RequestModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,6 +9,18 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        @Html.TextBox("SearchString")
+        @Html.RadioButton("searchString", "Ap")<span>AprovalStatus</span>
+        @Html.RadioButton("searchString", "C")<span>Category</span>
+       
+        <input type="submit" value="Search" />
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -19,29 +31,28 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ApprovalStatus)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Location)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CompletionStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Priority)
+                @Html.DisplayNameFor(model => model.Photo)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DueDate)
+                @Html.ActionLink("FullName", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCompleted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Worker)
-            </th>
-
+           <!-- <th>
+                @Html.DisplayNameFor(model => model.PublicUser.FullName)
+             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedAt)
+             </th>-->
+            <th>
+                @Html.ActionLink("CreatedAt", "Index", new { sortOrder = ViewBag.DateSortParm })
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Deleted)
@@ -59,27 +70,20 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.ApprovalStatus)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CompletionStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priority)
+                @Html.DisplayFor(modelItem => item.Photo)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
+                @Html.DisplayFor(modelItem => item.PublicUser.FullName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCompleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Worker.FullName)
-            </td>
-           
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
@@ -87,11 +91,11 @@
                 @Html.DisplayFor(modelItem => item.Deleted)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Approved</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                <a asp-action="AssignToWorker" asp-route-id="@item.Id">Assign to a Worker</a>
-
+                <a asp-action="Reject" asp-route-id="@item.Id">Reject</a>
+                
             </td>
         </tr>
 }

@@ -1,13 +1,13 @@
-﻿@model MUSM_api_MVCwebapp.Models.TaskModel
+﻿@model MUSM_api_MVCwebapp.Models.RequestModel
 
 @{
     ViewData["Title"] = "Details";
 }
-
+<!--
 <h1>Details</h1>
 
 <div>
-    <h4>TaskModel</h4>
+    <h4>RequestModel</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -23,22 +23,22 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ApprovalStatus)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ApprovalStatus)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Location)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Location)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CompletionStatus)
+            @Html.DisplayNameFor(model => model.Photo)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CompletionStatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Priority)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Priority)
+            @Html.DisplayFor(model => model.Photo)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
@@ -47,44 +47,26 @@
             @Html.DisplayFor(model => model.Category)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DueDate)
+            @Html.DisplayNameFor(model => model.PublicUser)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DueDate)
+            @Html.DisplayFor(model => model.PublicUser.Id)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCompleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCompleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Worker)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Worker.FullName)
-        </dd>
-        <!--<dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Request)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Request.Description)
-        </dd>-->
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
-        <!--<dt class = "col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Deleted)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Deleted)
-        </dd>-->
+        </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>
+</div>-->

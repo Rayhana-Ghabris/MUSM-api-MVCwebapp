@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Models;
@@ -20,8 +21,31 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
 
         // GET: Tasks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
+           
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "priority_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            var tasks = from s in _context.Tasks
+                           select s;
+            switch (sortOrder)
+            {
+                
+                case "priority_desc":
+                    tasks = tasks.OrderByDescending(s => s.Priority);
+                    break;
+                case "Date":
+                    tasks = tasks.OrderBy(s => s.DueDate);
+                    break;
+                case "date_desc":
+                    tasks = tasks.OrderByDescending(s => s.DueDate);
+                    break;
+                default:
+                    tasks = tasks.OrderBy(s => s.CompletionStatus);
+                    break;
+            }
+
+
             var applicationDbContext = _context.Tasks.Include(t => t.Request).Include(t => t.Worker);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -50,7 +74,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         public IActionResult Create()
         {
             ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description");
-            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "FullName");
             return View();
         }
 
@@ -59,7 +83,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Location,CompletionStatus,Priority,Category,DueDate,DateCompleted,WorkerId,RequestId,CreatedAt,Deleted")] TaskModel taskModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Location,CompletionStatus,Priority,Category,DueDate,DateCompleted,WorkerId")] TaskModel taskModel)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +91,8 @@ namespace MUSM_api_MVCwebapp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description", taskModel.RequestId);
-            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "Id", taskModel.WorkerId);
+            //ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description", taskModel.RequestId);
+            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "FullName", taskModel.WorkerId);
             return View(taskModel);
         }
 
@@ -85,8 +109,8 @@ namespace MUSM_api_MVCwebapp.Controllers
             {
                 return NotFound();
             }
-            ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description", taskModel.RequestId);
-            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "Id", taskModel.WorkerId);
+            //ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description", taskModel.RequestId);
+            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "FullName", taskModel.WorkerId);
             return View(taskModel);
         }
 
@@ -122,8 +146,8 @@ namespace MUSM_api_MVCwebapp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description", taskModel.RequestId);
-            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "Id", taskModel.WorkerId);
+            //ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description", taskModel.RequestId);
+            ViewData["Worker"] = new SelectList(_context.Users, "Id", "FullName", taskModel.WorkerId);
             return View(taskModel);
         }
 
@@ -159,10 +183,14 @@ namespace MUSM_api_MVCwebapp.Controllers
             var taskModel = await _context.Tasks.FindAsync(id);
             if (taskModel != null)
             {
-                _context.Tasks.Remove(taskModel);
+                taskModel.Deleted = true;
+
+                _context.Entry(taskModel).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
             }
             
-            await _context.SaveChangesAsync();
+           
             return RedirectToAction(nameof(Index));
         }
 
