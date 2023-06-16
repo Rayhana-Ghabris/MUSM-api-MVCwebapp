@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MUSM_api_MVCwebapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230612202508_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20230616081300_Migration-requestID-nullable")]
+    partial class MigrationrequestIDnullable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -346,7 +346,6 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<int?>("RequestId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -360,7 +359,8 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RequestId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[RequestId] IS NOT NULL");
 
                     b.HasIndex("WorkerId");
 
@@ -449,8 +449,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasOne("MUSM_api_MVCwebapp.Models.RequestModel", "Request")
                         .WithOne("Task")
                         .HasForeignKey("MUSM_api_MVCwebapp.Models.TaskModel", "RequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("MUSM_api_MVCwebapp.Data.AppUser", "Worker")
                         .WithMany("Tasks")

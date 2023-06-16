@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Details";
 }
-<!--
+
 <h1>Details</h1>
 
 <div>
@@ -38,7 +38,7 @@
             @Html.DisplayNameFor(model => model.Photo)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Photo)
+            <img src=@Model.Photo width="200" height="200" />
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
@@ -50,7 +50,7 @@
             @Html.DisplayNameFor(model => model.PublicUser)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PublicUser.Id)
+            @Html.DisplayFor(model => model.PublicUser.FullName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
@@ -69,4 +69,4 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>-->
+</div>

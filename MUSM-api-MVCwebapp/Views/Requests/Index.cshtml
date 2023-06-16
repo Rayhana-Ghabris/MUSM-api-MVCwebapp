@@ -6,10 +6,6 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
 @using (Html.BeginForm())
 {
     <p>
@@ -17,7 +13,7 @@
     </p>
 
     <p>
-        Filter By Aproval Status: @Html.ListBox("SelectedStatuses")
+        Filter By Approval Status: @Html.ListBox("SelectedStatuses")
 
         Filter By Category: @Html.ListBox("SelectedCategories")
     </p>
@@ -85,7 +81,7 @@
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Photo)
+                <img src=@item.Photo width="70" height="90" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category)
@@ -100,7 +96,7 @@
                 @Html.DisplayFor(modelItem => item.Deleted)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Approved</a> |
+                <a asp-action="Approve" asp-route-id="@item.Id">Approve</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 <a asp-action="Reject" asp-route-id="@item.Id">Reject</a>

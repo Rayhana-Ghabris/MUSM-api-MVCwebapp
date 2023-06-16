@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -15,9 +16,12 @@ namespace MUSM_api_MVCwebapp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public TasksController(ApplicationDbContext context)
+        private readonly UserManager<AppUser> _userManager;
+
+        public TasksController(ApplicationDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Tasks
@@ -71,10 +75,17 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
 
         // GET: Tasks/Create
-        public IActionResult Create()
+        //[HttpGet("[action]/{requestModel}")]
+        public async Task<IActionResult> Create(RequestModel? requestModel)
         {
-            ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description");
-            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "FullName");
+            if (requestModel.Id > 0)
+            {
+                ViewData["Request"] = requestModel;
+            }
+
+            // Get list of workers from db
+            ViewData["WorkerId"] = new SelectList(await _userManager.GetUsersInRoleAsync("Worker"), "Id" ,"FullName");
+
             return View();
         }
 
@@ -83,16 +94,29 @@ namespace MUSM_api_MVCwebapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Location,CompletionStatus,Priority,Category,DueDate,DateCompleted,WorkerId")] TaskModel taskModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Location,CompletionStatus,Priority,Category,DueDate,DateCompleted,WorkerId,RequestId")] TaskModel taskModel)
         {
+            taskModel.Id = 0;
             if (ModelState.IsValid)
             {
                 _context.Add(taskModel);
                 await _context.SaveChangesAsync();
+
+                if (taskModel.RequestId > 0)
+                {
+                    var request = await _context.Requests
+                                    .FindAsync(taskModel.RequestId);
+
+                    request.ApprovalStatus = "Approved";
+
+                    _context.Entry(request).State = EntityState.Modified;
+
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description", taskModel.RequestId);
-            ViewData["WorkerId"] = new SelectList(_context.Users, "Id", "FullName", taskModel.WorkerId);
+            
             return View(taskModel);
         }
 

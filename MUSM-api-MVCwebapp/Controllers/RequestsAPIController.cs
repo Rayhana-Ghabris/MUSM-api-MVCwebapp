@@ -6,10 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Dtos;
 using MUSM_api_MVCwebapp.Models;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace MUSM_api_MVCwebapp.Controllers
 {
@@ -39,7 +36,6 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             if (!String.IsNullOrEmpty(categorySearch))
             {
-
                 result = result.Where(request => request.Category.Equals(categorySearch));
             }
 
@@ -60,7 +56,6 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Ok(requestsList);
         }
 
-
         //GetRequest([route]id)*
         [HttpGet("[action]/{id}")]
         [Authorize(Policy = "RequirePublicUserRole")]
@@ -75,7 +70,6 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Ok(requestsList);
 
         }
-
 
         //GetRequestCompletionStatus([route]idofrequest)
         [HttpGet("[action]/{id}")]
@@ -94,9 +88,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return Ok(task.CompletionStatus);
 
-
         }
-
 
         //change createRequest-->PostRequest*
         //UpdateRequest([route]idofrequest, [body]updatedrequest)
@@ -119,8 +111,6 @@ namespace MUSM_api_MVCwebapp.Controllers
                 return NotFound();
             }
 
-            
-
             // If the request was found
             request.Title = data.Title;
             request.Description = data.Description;
@@ -133,10 +123,7 @@ namespace MUSM_api_MVCwebapp.Controllers
             await _db.SaveChangesAsync();
 
             return Ok("Successfully updated");
-
         }
-
-
 
         //DeleteRequest([route]idofrequest) deleted=true
         [HttpDelete("[action]/{id}")]
@@ -150,7 +137,6 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             var request = await _db.Requests
               .FindAsync(id);           
-
 
             if (!request.PublicUserId.Equals(User.FindFirst(ClaimTypes.NameIdentifier).Value)
                  || request == null)
@@ -166,10 +152,6 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Ok("Successfully deleted");
 
         }
-
-
-
-
 
         //URL: https://localhost:7058/api/requestsapi/PostRequest
         [HttpPost("[action]")]

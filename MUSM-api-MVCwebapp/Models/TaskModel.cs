@@ -21,7 +21,7 @@ namespace MUSM_api_MVCwebapp.Models
         public string? Location { get; set; }
 
         [StringLength(256, ErrorMessage = "Maximum length for title is {1}")]
-        public string? CompletionStatus { get; set; }
+        public string? CompletionStatus { get; set; } = "Open";
 
         [Required]
         [StringLength(256, ErrorMessage = "Maximum length for title is {1}")]

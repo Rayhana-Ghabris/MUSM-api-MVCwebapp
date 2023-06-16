@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Dtos;
 using MUSM_api_MVCwebapp.Models;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace MUSM_api_MVCwebapp.Controllers
 {
     public class RequestsController : Controller
     {
         private readonly ApplicationDbContext _context;
+
+        private readonly UserManager<AppUser> _userManager;
 
         private readonly List<string> ApprovalStatuses = new List<string> {
             "Approved","Rejected","Under Evaluation"
@@ -24,9 +26,10 @@ namespace MUSM_api_MVCwebapp.Controllers
             "Electical","Technological","Plumbing","Constraction","Carpentry"
         };
 
-        public RequestsController(ApplicationDbContext context)
+        public RequestsController(ApplicationDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // TODO paging + filtering 
@@ -115,8 +118,8 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
 
 
-        // GET: Requests/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Requests/Approve/5
+        public async Task<IActionResult> Approve(int? id)
         {
             if (id == null || _context.Requests == null)
             {
@@ -124,91 +127,26 @@ namespace MUSM_api_MVCwebapp.Controllers
             }
 
             var requestModel = await _context.Requests.FindAsync(id);
+
             if (requestModel == null)
             {
                 return NotFound();
             }
-            // Get list of workers from db
-            ViewData["Workers"] = await (
-                    from user in _context.Users
-                    join userRole in _context.UserRoles
-                    on user.Id equals userRole.UserId
-                    join role in _context.Roles
-                    on userRole.RoleId equals role.Id
-                    where role.Name == "Worker"
-                    select new AppUserDto
-                    {
-                        Id = user.Id,
-                        FullName = user.FullName,
-                        Email = user.Email,
 
-                    }).ToListAsync();
-
-            return View(requestModel);
+            return RedirectToAction("Create", "Tasks", requestModel);
         }
-
-        // POST: Requests/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,ApprovalStatus,Location,Category")] RequestModel requestModel)
-        {
-            if (id != requestModel.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Tasks.Add(requestModel.Task);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RequestModelExists(requestModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["Workers"] = await (
-                    from user in _context.Users
-                    join userRole in _context.UserRoles
-                    on user.Id equals userRole.UserId
-                    join role in _context.Roles
-                    on userRole.RoleId equals role.Id
-                    where role.Name == "Worker"
-                    select new AppUserDto
-                    {
-                        Id = user.Id,
-                        FullName = user.FullName,
-                        Email = user.Email,
-
-                    }).ToListAsync();
-
-            return View(requestModel);
-        }
-
 
         // POST: Requests/Rejected/5
         [HttpPost, ActionName("Reject")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Reject(int id, [Bind("Id,Title,Description,ApprovalStatus,Location,Category")] RequestModel requestModel)
+        public async Task<IActionResult> Reject(int id)
         {
-            if (id != requestModel.Id)
+            if (id <= 0)
             {
                 return NotFound();
             }
 
-            requestModel = await _context.Requests.FindAsync(id);
+            var requestModel = await _context.Requests.FindAsync(id);
 
             if (requestModel != null)
             {
@@ -221,29 +159,24 @@ namespace MUSM_api_MVCwebapp.Controllers
             }
 
             return RedirectToAction(nameof(Index));
-
         }
 
         
         // POST: Requests/Undo Evaluation/5
         [HttpPost, ActionName("UndoEvaluation")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UndoEvaluation(int id, [Bind("Id,Title,Description,ApprovalStatus,Location,Category")] RequestModel requestModel)
+        public async Task<IActionResult> UndoEvaluation(int id)
         {
-            if (id != requestModel.Id)
+            if (id <= 0 )
             {
                 return NotFound();
             }
 
-            requestModel = await _context.Requests.FindAsync(id);
+            var requestModel = await _context.Requests.FindAsync(id);
 
             if (requestModel != null)
             {
-               if (requestModel.ApprovalStatus.Equals("Aprove") || requestModel.ApprovalStatus.Equals("Reject") || requestModel.ApprovalStatus.Equals("Delete") )
-                {
-                    requestModel.ApprovalStatus  = "Under Evaluation";
-                  
-                }
+                requestModel.ApprovalStatus  = "Under Evaluation";
 
                 _context.Entry(requestModel).State = EntityState.Modified;
 
@@ -309,11 +242,4 @@ namespace MUSM_api_MVCwebapp.Controllers
     }
     #endregion
 
-
-
-    //AssignToWorker
-   /* public async Task<IActionResult> AssignToWorker(int id)
-    {
-
-    }*/
 }

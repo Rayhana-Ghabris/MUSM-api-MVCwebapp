@@ -13,7 +13,7 @@ namespace MUSM_api_MVCwebapp.Dtos
     
         public string? Location { get; set; }
   
-        public string? CompletionStatus { get; set; }
+        public string? CompletionStatus { get; set; } = "Open";
 
         public string? Priority { get; set; }
 

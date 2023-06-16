@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MUSM_api_MVCwebapp.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class MigrationrequestIDnullable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -197,7 +197,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DateCompleted = table.Column<DateTime>(type: "datetime2", nullable: true),
                     WorkerId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
-                    RequestId = table.Column<int>(type: "int", nullable: false),
+                    RequestId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -305,7 +305,8 @@ namespace MUSM_api_MVCwebapp.Migrations
                 name: "IX_Tasks_RequestId",
                 table: "Tasks",
                 column: "RequestId",
-                unique: true);
+                unique: true,
+                filter: "[RequestId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_WorkerId",
