@@ -13,12 +13,27 @@
 @using (Html.BeginForm())
 {
     <p>
-        @Html.TextBox("SearchString")
-        @Html.RadioButton("searchString", "Ap")<span>AprovalStatus</span>
-        @Html.RadioButton("searchString", "C")<span>Category</span>
-       
-        <input type="submit" value="Search" />
+        SearchBox: @Html.TextBox("SearchString")
     </p>
+
+    <p>
+        Filter By Aproval Status: @Html.ListBox("SelectedStatuses")
+
+        Filter By Category: @Html.ListBox("SelectedCategories")
+    </p>
+        
+    <p>
+        Show Deleted: @Html.CheckBox("showDeleted")
+        Sort By Oldest: @Html.CheckBox("ascending")
+    </p>
+
+    <p>
+        <input type="submit" value="Search" />
+        <button>
+            @Html.ActionLink("Clear Filter", "Index")
+        </button>
+    </p>
+
 }
 
 <table class="table">
@@ -43,17 +58,11 @@
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-                @Html.ActionLink("FullName", "Index", new { sortOrder = ViewBag.NameSortParm })
-            </th>
-           <!-- <th>
                 @Html.DisplayNameFor(model => model.PublicUser.FullName)
-             </th>
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedAt)
-             </th>-->
-            <th>
-                @Html.ActionLink("CreatedAt", "Index", new { sortOrder = ViewBag.DateSortParm })
-            </th>
+             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Deleted)
             </th>

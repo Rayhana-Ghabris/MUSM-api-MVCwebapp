@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RequestsAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
@@ -26,36 +27,32 @@ namespace MUSM_api_MVCwebapp.Controllers
             _db = context;
             _mapper = mapper;
         }
-        //TODO
+        
         [HttpGet("[action]")]
         [Authorize(Policy = "RequirePublicUserRole")]
-        public async Task<ActionResult> GetRequests([FromQuery] string categorySearch, [FromQuery] string locationSearch, [FromQuery] string keyword)
+        public async Task<ActionResult> GetRequests([FromQuery] string? categorySearch, [FromQuery] string? locationSearch, [FromQuery] string? keyword)
         {
             List<RequestModel>? requestsList = null;
 
             var result = _db.Requests
-              .Where(request => request.Deleted == false)
-              .Where(request => request.Category.Equals(categorySearch))
-              .Where(request => request.Location.Equals(locationSearch))
-              .Where(request => request.Description.Contains(keyword) || request.Title.Contains(keyword));
+              .Where(request => request.Deleted == false);
 
-
-             /*if (!String.IsNullOrEmpty(categorySearch) )
-             {  
-              
-                 result.Where(request => request.Category.Equals(categorySearch));
-             }
-
-             if (!String.IsNullOrEmpty(locationSearch))
+            if (!String.IsNullOrEmpty(categorySearch))
             {
-                 result.Where(request => request.Location.Equals(locationSearch));
-             }
 
-             if (!String.IsNullOrEmpty(keyword))
+                result = result.Where(request => request.Category.Equals(categorySearch));
+            }
+
+            if (!String.IsNullOrEmpty(locationSearch))
             {
-                 result.Where(request => request.Description.Contains(keyword) || request.Title.Contains(keyword));
-             }
-             */
+                result = result.Where(request => request.Location.Equals(locationSearch));
+            }
+
+            if (!String.IsNullOrEmpty(keyword))
+            {
+                result = result.Where(request => request.Description.Contains(keyword) || request.Title.Contains(keyword));
+            }
+
             requestsList = result.ToList();
 
             if (requestsList == null || requestsList.Count() <= 0) return NotFound(new JsonResult("No Requests existed."));

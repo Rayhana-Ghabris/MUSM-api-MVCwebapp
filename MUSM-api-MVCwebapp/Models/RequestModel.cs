@@ -36,13 +36,11 @@ namespace MUSM_api_MVCwebapp.Models
         [ForeignKey("PublicUserId")]
         public AppUser? PublicUser { get; set; }
 
-
        //new 
-      
         public TaskModel? Task { get; set; }
 
-
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
         public bool Deleted { get; set; } = false;
 
   

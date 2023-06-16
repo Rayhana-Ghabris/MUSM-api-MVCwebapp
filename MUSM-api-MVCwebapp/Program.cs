@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Helpers;
-using System.Configuration;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,13 +51,7 @@ var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
 //Add Authentication Service: Configure how the server will validate the JWT recieved in HTTP request header
 
-builder.Services.AddAuthentication(o =>
-{
-    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    o.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-
-}).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -69,7 +62,6 @@ builder.Services.AddAuthentication(o =>
         ValidAudience = appSettings.Audience,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateLifetime = false
-
     };
 });
 

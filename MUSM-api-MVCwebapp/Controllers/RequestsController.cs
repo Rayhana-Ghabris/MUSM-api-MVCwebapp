@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Dtos;
 using MUSM_api_MVCwebapp.Models;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace MUSM_api_MVCwebapp.Controllers
 {
@@ -15,52 +16,84 @@ namespace MUSM_api_MVCwebapp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        private readonly List<string> ApprovalStatuses = new List<string> {
+            "Approved","Rejected","Under Evaluation"
+        };
+
+        private readonly List<string> Categories = new List<string> {
+            "Electical","Technological","Plumbing","Constraction","Carpentry"
+        };
+
         public RequestsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // TODO paging + filtering 
+        // 1- Order by CreatedAt: ascending: true - descending: false 
+        // 2- Search Box: Title, Description, PublicUser.FullName, Location
+        // 3- Filters:
+        //          a) SelectedCategories: Electical, Technological, Plumbing , Constraction, Carpentry
+        //          b) ApprovalStatus : Approved, Rejected, Under Evaluation
         // GET: Requests
 
-        public ActionResult Index(string sortOrder, string searchString)
+        public ActionResult Index(bool showDeleted, bool ascending, string? searchString, List<string> SelectedCategories, List<string> SelectedStatuses)
         {
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "CreatedAt" ? "CreatedAt_desc" : "Date";
-            var requests = from s in _context.Requests
-                           select s;
+            
+            List<RequestModel>? requestsList = null;
+
+            IQueryable<RequestModel> result = _context.Requests.Include( r => r.PublicUser);
+
+            //Do not return deleted requests if showDeleted==false
+
+            if (!showDeleted)
+            {
+                result = result.Where(request => request.Deleted == false);
+            }
+            
+            //If Search Box is not Empty, apply conditions on the query
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                requests = requests.Where(s => s.Description.Contains(searchString)
-                                       || s.Title.Contains(searchString)
-                                       || s.PublicUser.FullName.Contains(searchString)
-                                       || s.Location.Contains(searchString)
-                                       && (s.ApprovalStatus.StartsWith(searchString) 
-                                           || s.Category.StartsWith(searchString) ));
+                result = result.Where(request => request.Title.Contains(searchString)
+                || request.Description.Contains(searchString)
+                || request.Location.Contains(searchString)
+                || request.PublicUser.FullName.Contains(searchString));
             }
 
-            switch (sortOrder)
+            // If Maanger selected categories, show only request of selected categories
+
+            if (SelectedCategories!=null && SelectedCategories.Count>0)
             {
-
-                case "Date":
-                    requests = requests.OrderBy(s => s.CreatedAt);
-                    break;
-
-                case "date_desc":
-                    requests = requests.OrderByDescending(s => s.CreatedAt);
-                    break;
-
+                result = result.Where(request => SelectedCategories.Contains(request.Category));
             }
 
-            return View(requests.ToList());
+            // If Maanger selected approval status, show only request of selected approval statuses
+
+            if (SelectedStatuses != null && SelectedStatuses.Count > 0)
+            {
+                result = result.Where(request => SelectedStatuses.Contains(request.ApprovalStatus));
+            }
+
+            // Order By CreatedAt
+
+            if (!ascending)
+            {
+                result = result.OrderByDescending(r => r.CreatedAt);
+            }
+
+            else
+            {
+                result = result.OrderBy(r => r.CreatedAt);
+            }
+
+            requestsList = result.ToList();
+
+            ViewData["SelectedStatuses"] = new SelectList(ApprovalStatuses);
+            ViewData["SelectedCategories"] = new SelectList(Categories);
+
+            return View(requestsList);
         }
-        /*
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Requests.Include(r => r.PublicUser);
-            return View(await applicationDbContext.ToListAsync());
-        }*/
 
         // GET: Requests/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -80,8 +113,6 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return View(requestModel);
         }
-
-
 
 
         // GET: Requests/Edit/5
@@ -214,7 +245,6 @@ namespace MUSM_api_MVCwebapp.Controllers
                   
                 }
 
-             
                 _context.Entry(requestModel).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
@@ -223,10 +253,8 @@ namespace MUSM_api_MVCwebapp.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-       
 
-
-        #region
+        #region Delete
         // GET: Requests/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -248,7 +276,8 @@ namespace MUSM_api_MVCwebapp.Controllers
         #endregion
 
 
-        #region
+        #region Delete Confirmation
+
         // POST: Requests/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
