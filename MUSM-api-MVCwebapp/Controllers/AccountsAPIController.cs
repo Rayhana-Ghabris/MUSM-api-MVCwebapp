@@ -117,7 +117,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
 
-                return Ok(new { token = tokenHandler.WriteToken(token), email = user.Email, userRole = roles.FirstOrDefault() });
+                return Ok(new { token = tokenHandler.WriteToken(token), email = user.Email, name = user.FullName });
 
             }
 

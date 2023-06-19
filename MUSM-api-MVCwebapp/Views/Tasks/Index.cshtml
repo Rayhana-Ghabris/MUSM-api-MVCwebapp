@@ -9,6 +9,34 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        SearchBox: @Html.TextBox("SearchString")
+    </p>
+
+    <p>
+        Filter By Completion Status: @Html.ListBox("SelectedStatuses")
+
+        Filter By Category: @Html.ListBox("SelectedCategories")
+
+        Filter By Priority: @Html.ListBox("SelectedPriority")
+    </p>
+        
+    <p>
+        Show Deleted: @Html.CheckBox("showDeleted")
+        Sort By Oldest: @Html.CheckBox("ascending")
+    </p>
+
+    <p>
+        <input type="submit" value="Search" />
+        <button>
+            @Html.ActionLink("Clear Filter", "Index")
+        </button>
+    </p>
+
+}
 <table class="table">
     <thead>
         <tr>
@@ -33,9 +61,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.DueDate)
             </th>
-            <th>
+            <!--<th>
                 @Html.DisplayNameFor(model => model.DateCompleted)
-            </th>
+            </th>-->
             <th>
                 @Html.DisplayNameFor(model => model.Worker)
             </th>
@@ -73,9 +101,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DueDate)
             </td>
-            <td>
+            <!--<td>
                 @Html.DisplayFor(modelItem => item.DateCompleted)
-            </td>
+            </td>-->
             <td>
                 @Html.DisplayFor(modelItem => item.Worker.FullName)
             </td>
@@ -89,8 +117,17 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 <a asp-action="AssignToWorker" asp-route-id="@item.Id">Assign to a Worker</a>
+
+                    @if (item.Deleted == true)
+                    {
+                        <a asp-action="UndoDelete" asp-route-id="@item.Id">Undo Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+
 
             </td>
         </tr>

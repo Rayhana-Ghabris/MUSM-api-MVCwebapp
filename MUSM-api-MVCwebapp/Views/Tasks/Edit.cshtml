@@ -29,18 +29,80 @@
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CompletionStatus" class="control-label"></label>
-                <input asp-for="CompletionStatus" class="form-control" />
+                <label asp-for="CompletionStatus" class="control-label">Completion Status</label>
+                <div class="form-control">
+                    <label>
+                        <input type="radio" asp-for="CompletionStatus" value="Open" />
+                        Open
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="CompletionStatus" value="Assigned" />
+                        Assigned
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="CompletionStatus" value="In Progress" />
+                        In Progress
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="CompletionStatus" value="On Hold" />
+                        On Hold
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="CompletionStatus" value="Done" />
+                        Done
+                    </label>
+
+                </div>
+                
                 <span asp-validation-for="CompletionStatus" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="Priority" class="control-label"></label>
                 <input asp-for="Priority" class="form-control" />
                 <span asp-validation-for="Priority" class="text-danger"></span>
+            </div>*@
+
+            <label asp-for="Priority" class="control-label">Priority</label>
+            <div class="form-control">
+                <label>
+                    <input type="radio" asp-for="Priority" value="Low" />
+                    Low
+                </label>
+                <label>
+                    <input type="radio" asp-for="Priority" value="Medium" />
+                    Medium
+                </label>
+                <label>
+                    <input type="radio" asp-for="Priority" value="High" />
+                    High
+                </label>
             </div>
+            <span asp-validation-for="Priority" class="text-danger"></span>
+
             <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
+                <label asp-for="Category" class="control-label">Category</label>
+                <div class="form-control">
+                    <label>
+                        <input type="radio" asp-for="Category" value="Electrical" />
+                        Electrical
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Category" value="Technological" />
+                        Technological
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Category" value="Plumbing" />
+                        Plumbing
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Category" value="Construction" />
+                        Construction
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Category" value="Carpentry" />
+                        Carpentry
+                    </label>
+                </div>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -48,26 +110,19 @@
                 <input asp-for="DueDate" class="form-control" />
                 <span asp-validation-for="DueDate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="DateCompleted" class="control-label"></label>
-                <input asp-for="DateCompleted" class="form-control" />
-                <span asp-validation-for="DateCompleted" class="text-danger"></span>
+                <label asp-for="WorkerId" class="control-label"></label>
+                <select asp-for="WorkerId" class="form-control" asp-items="ViewBag.WorkerId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="Worker" class="control-label"></label>
-                <select asp-for="Worker" class="form-control" asp-items="ViewBag.Worker"></select>
-                <span asp-validation-for="Worker" class="text-danger"></span>
-            </div>
+
+
             <!--<div class="form-group">
                 <label asp-for="RequestId" class="control-label"></label>
                 <select asp-for="RequestId" class="form-control" asp-items="ViewBag.RequestId"></select>
                 <span asp-validation-for="RequestId" class="text-danger"></span>
             </div>-->
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
+            
             <!--<div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Deleted" /> @Html.DisplayNameFor(model => model.Deleted)
@@ -87,7 +142,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Cancel</a>
 </div>
 
 @section Scripts {

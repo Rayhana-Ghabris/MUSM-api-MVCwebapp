@@ -23,7 +23,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         };
 
         private readonly List<string> Categories = new List<string> {
-            "Electical","Technological","Plumbing","Constraction","Carpentry"
+            "Electrical","Technological","Plumbing","Construction","Carpentry"
         };
 
         public RequestsController(ApplicationDbContext context, UserManager<AppUser> userManager)
@@ -32,6 +32,7 @@ namespace MUSM_api_MVCwebapp.Controllers
             _userManager = userManager;
         }
 
+        #region Index
         // TODO paging + filtering 
         // 1- Order by CreatedAt: ascending: true - descending: false 
         // 2- Search Box: Title, Description, PublicUser.FullName, Location
@@ -97,7 +98,9 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return View(requestsList);
         }
+        #endregion
 
+        #region Request Details
         // GET: Requests/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -116,8 +119,9 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return View(requestModel);
         }
+        #endregion
 
-
+        #region Approve Request
         // GET: Requests/Approve/5
         public async Task<IActionResult> Approve(int? id)
         {
@@ -135,7 +139,9 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return RedirectToAction("Create", "Tasks", requestModel);
         }
+        #endregion 
 
+        #region Reject Request
         // POST: Requests/Rejected/5
         [HttpPost, ActionName("Reject")]
         [ValidateAntiForgeryToken]
@@ -160,12 +166,10 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
-        
-        // POST: Requests/Undo Evaluation/5
-        [HttpPost, ActionName("UndoEvaluation")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UndoEvaluation(int id)
+        #region Undo Evaluation
+        public async Task<IActionResult> UndoEvaluation(int? id)
         {
             if (id <= 0 )
             {
@@ -186,6 +190,30 @@ namespace MUSM_api_MVCwebapp.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+        #endregion
+
+        #region UndoDelete
+        // GET: Requests/UndoDelete/5
+        public async Task<IActionResult> UndoDelete(int? id)
+        {
+            if (id == null || _context.Requests == null)
+            {
+                return NotFound();
+            }
+
+            var requestModel = await _context.Requests.FindAsync(id);
+            if (requestModel != null)
+            {
+                requestModel.Deleted = false;
+
+                _context.Entry(requestModel).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        #endregion
 
         #region Delete
         // GET: Requests/Delete/5
@@ -207,7 +235,6 @@ namespace MUSM_api_MVCwebapp.Controllers
             return View(requestModel);
         }
         #endregion
-
 
         #region Delete Confirmation
 
@@ -234,12 +261,16 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
         private bool RequestModelExists(int id)
         {
             return (_context.Requests?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
-    #endregion
+    
+
+      
+
 
 }
