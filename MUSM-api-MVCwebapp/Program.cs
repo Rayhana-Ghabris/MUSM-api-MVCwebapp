@@ -75,6 +75,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Manager").RequireAuthenticatedUser());
     options.AddPolicy("RequireWorkerRole", policy => policy.RequireRole("Worker").RequireAuthenticatedUser());
     options.AddPolicy("RequirePublicUserRole", policy => policy.RequireRole("PublicUser").RequireAuthenticatedUser());
+    options.AddPolicy("RequireManagerOrWorkerRole", policy => policy.RequireRole("Manager", "Worker").RequireAuthenticatedUser());
 });
 
 builder.Services.AddControllersWithViews();

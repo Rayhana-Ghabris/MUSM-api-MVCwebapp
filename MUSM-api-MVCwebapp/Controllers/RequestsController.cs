@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -45,6 +46,9 @@ namespace MUSM_api_MVCwebapp.Controllers
         //          b) ApprovalStatus : Approved, Rejected, Under Evaluation
         // GET: Requests
 
+
+       
+        [Authorize(Policy = "RequireManagerRole")]
         public ActionResult Index(bool showDeleted, bool ascending, string? searchString, List<string> SelectedCategories, List<string> SelectedStatuses)
         {
             
@@ -109,8 +113,10 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
+
         #region Request Details
         // GET: Requests/Details/5
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Requests == null)
@@ -131,6 +137,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
+        [Authorize(Policy = "RequireManagerRole")]
         #region Approve Request
         // GET: Requests/Approve/5
         public async Task<IActionResult> Approve(int? id)
@@ -149,9 +156,13 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return RedirectToAction("Create", "Tasks", requestModel);
         }
-        #endregion 
+        #endregion
+
+
 
         #region Reject Request
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Reject(int id)
         {
             if (id <= 0)
@@ -176,6 +187,8 @@ namespace MUSM_api_MVCwebapp.Controllers
         #endregion
 
         #region Undo Evaluation
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> UndoEvaluation(int? id)
         {
             if (id <= 0 )
@@ -201,6 +214,8 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         #region UndoDelete
         // GET: Requests/UndoDelete/5
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> UndoDelete(int? id)
         {
             if (id == null || _context.Requests == null)
@@ -224,6 +239,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         #region Delete
         // GET: Requests/Delete/5
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Requests == null)
@@ -247,7 +263,8 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         // POST: Requests/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Requests == null)

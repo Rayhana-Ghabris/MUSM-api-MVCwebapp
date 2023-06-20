@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -44,6 +45,8 @@ namespace MUSM_api_MVCwebapp.Controllers
         //          a) Priority: "High","Medium","Low"
         //          b) CompletionStatus : "Open","Assigned","in Progress", "on Hold", "Done"
         // GET: Tasks
+        [Authorize(Policy = "RequireManagerOrWorkerRole")]
+       
         public async Task<IActionResult> Index(bool showDeleted, bool ascending, string? searchString, List<string> SelectedPriority, List<string> SelectedStatuses, List<string> SelectedCategories)
         {
             List<TaskModel>? tasksList = null;
@@ -113,6 +116,8 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         #region Task Details
         // GET: Tasks/Details/5
+
+        [Authorize(Policy = "RequireManagerOrWorkerRole")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Tasks == null)
@@ -137,6 +142,8 @@ namespace MUSM_api_MVCwebapp.Controllers
         #region GET: Tasks Create
         // GET: Tasks/Create
         //[HttpGet("[action]/{requestModel}")]
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Create(RequestModel? requestModel)
         {
             if (requestModel.Id > 0)
@@ -159,6 +166,8 @@ namespace MUSM_api_MVCwebapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Location,CompletionStatus,Priority,Category,DueDate,DateCompleted,WorkerId,RequestId")] TaskModel taskModel)
         {
             taskModel.Id = 0;
@@ -191,6 +200,8 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         #region GET: Tasks Edit 
         // GET: Tasks/Edit/5
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Tasks == null)
@@ -215,7 +226,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Location,CompletionStatus,Priority,Category,DueDate,DateCompleted,WorkerId,RequestId,CreatedAt,Deleted")] TaskModel taskModel)
         {
             if (id != taskModel.Id)
@@ -252,6 +263,8 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         #region UndoDelete
         // GET: Tasks/UndoDelete/5
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> UndoDelete(int? id)
         {
             if (id == null || _context.Tasks == null)
@@ -276,6 +289,8 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         #region Delete Task
         // GET: Tasks/Delete/5
+
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Tasks == null)
@@ -300,7 +315,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         #region Delete Confirmed
         // POST: Tasks/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Tasks == null)
