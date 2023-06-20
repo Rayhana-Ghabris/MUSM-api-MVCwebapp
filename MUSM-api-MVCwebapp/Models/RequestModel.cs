@@ -43,6 +43,8 @@ namespace MUSM_api_MVCwebapp.Models
 
         public bool Deleted { get; set; } = false;
 
+        [NotMapped]
+        public int? VotesCount { get; set; }
   
 
     }

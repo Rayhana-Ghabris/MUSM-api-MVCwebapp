@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Helpers;
+using MUSM_api_MVCwebapp.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -87,6 +88,8 @@ var mappingConfig = new MapperConfiguration(mc =>
 IMapper mapper = mappingConfig.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
+
+builder.Services.AddTransient<VotesService>();
 
 var app = builder.Build();
 

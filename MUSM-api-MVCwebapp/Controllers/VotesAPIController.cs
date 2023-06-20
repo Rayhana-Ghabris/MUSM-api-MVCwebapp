@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Dtos;
 using MUSM_api_MVCwebapp.Models;
+using MUSM_api_MVCwebapp.Services;
 using System.Net;
 using System.Security.Claims;
 
@@ -19,9 +20,12 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         private readonly ApplicationDbContext _db;
 
-        public VotesAPIController(ApplicationDbContext db)
+        private readonly VotesService _votesService;
+
+        public VotesAPIController(ApplicationDbContext db, VotesService votesService )
         {
             _db = db;
+            _votesService = votesService;
         }
 
         [HttpGet("[action]/{id}")]
@@ -89,45 +93,13 @@ namespace MUSM_api_MVCwebapp.Controllers
                 return NotFound();
             }
 
-            var vote = await _db.Votes
-              .FindAsync(id);
-
-            if (vote == null) return NotFound();
-
-            var countVotes = _db.Votes.Count();
-
-            await _db.SaveChangesAsync();
+            var countVotes = _votesService.CountVotesByRequestId(id);
 
             return Ok(countVotes);
         }
 
 
-        /*//DeleteVote([route]idofrequest)
-        [HttpDelete("[action]/{id}")]
-        [Authorize(Policy = "RequirePublicUserRole")]
-        public async Task<ActionResult> DeleteVote([FromRoute] int? id)
-        {
-            if (id <= 0)
-            {
-                return NotFound();
-            }
-
-            var vote = await _db.Votes
-              .FindAsync(id);
-
-            if (!vote.PublicUserId.Equals(User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                 || vote == null)
-            {
-                return NotFound();
-            }
-
-            _db.Votes.Remove(vote);
-
-            await _db.SaveChangesAsync();
-
-            return Ok("Successfully deleted");
-        }*/
-
+       
 
 
             [HttpDelete("[action]")]
@@ -147,8 +119,13 @@ namespace MUSM_api_MVCwebapp.Controllers
                     return NotFound();
                 }
 
-                
-                 _db.Votes.Remove(vote);
+                var VoteToBeRemoved = await _db.Votes.FindAsync(vote.RequestId, vote.PublicUserId);
+
+                if (VoteToBeRemoved == null)
+                {
+                return NotFound(VoteToBeRemoved);
+                }
+                 _db.Votes.Remove(VoteToBeRemoved);
 
                 await _db.SaveChangesAsync();
 

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Dtos;
 using MUSM_api_MVCwebapp.Models;
+using MUSM_api_MVCwebapp.Services;
 using System.Security.Claims;
 
 namespace MUSM_api_MVCwebapp.Controllers
@@ -19,10 +20,15 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         private readonly IMapper _mapper;
 
-        public RequestsAPIController(ApplicationDbContext context, IMapper mapper)
+        //injection of VotesService
+        private readonly VotesService _votesService;
+
+
+        public RequestsAPIController(ApplicationDbContext context, IMapper mapper, VotesService votesService)
         {
             _db = context;
             _mapper = mapper;
+            _votesService = votesService;
         }
         
         [HttpGet("[action]")]
@@ -53,6 +59,11 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             if (requestsList == null || requestsList.Count() <= 0) return NotFound(new JsonResult("No Requests existed."));
 
+            foreach (var item in requestsList)
+            {
+                item.VotesCount = _votesService.CountVotesByRequestId(item.Id);
+            }
+
             return Ok(requestsList);
         }
 
@@ -66,6 +77,12 @@ namespace MUSM_api_MVCwebapp.Controllers
                 .Where(request => request.PublicUserId.Equals(id));
 
             if (requestsList == null || requestsList.Count() <= 0) return NotFound(new JsonResult("No Requests existed."));
+
+            foreach (var item in requestsList)
+            {
+                item.VotesCount = _votesService.CountVotesByRequestId(item.Id);
+            }
+
 
             return Ok(requestsList);
 

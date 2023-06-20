@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Dtos;
 using MUSM_api_MVCwebapp.Models;
+using MUSM_api_MVCwebapp.Services;
 
 namespace MUSM_api_MVCwebapp.Controllers
 {
@@ -18,6 +19,8 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         private readonly UserManager<AppUser> _userManager;
 
+        private readonly VotesService _votesService;
+
         private readonly List<string> ApprovalStatuses = new List<string> {
             "Approved","Rejected","Under Evaluation"
         };
@@ -26,10 +29,11 @@ namespace MUSM_api_MVCwebapp.Controllers
             "Electrical","Technological","Plumbing","Construction","Carpentry"
         };
 
-        public RequestsController(ApplicationDbContext context, UserManager<AppUser> userManager)
+        public RequestsController(ApplicationDbContext context, UserManager<AppUser> userManager, VotesService votesService)
         {
             _context = context;
             _userManager = userManager;
+            _votesService = votesService;
         }
 
         #region Index
@@ -93,6 +97,11 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             requestsList = result.ToList();
 
+            foreach (var item in requestsList)
+            {
+                item.VotesCount = _votesService.CountVotesByRequestId(item.Id);
+            }
+
             ViewData["SelectedStatuses"] = new SelectList(ApprovalStatuses);
             ViewData["SelectedCategories"] = new SelectList(Categories);
 
@@ -116,7 +125,8 @@ namespace MUSM_api_MVCwebapp.Controllers
             {
                 return NotFound();
             }
-
+            requestModel.VotesCount = _votesService.CountVotesByRequestId(id);
+            
             return View(requestModel);
         }
         #endregion
@@ -264,10 +274,16 @@ namespace MUSM_api_MVCwebapp.Controllers
         {
             return (_context.Requests?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-    }
-    
 
-      
+        public async Task<IActionResult> ClearFilter()
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+
+    }
+
+
 
 
 }
