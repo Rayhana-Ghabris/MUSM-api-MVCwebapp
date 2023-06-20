@@ -24,8 +24,8 @@
     </p>
 
     <p>
-        <input type="submit" value="Search" />
-        <button>
+        <input type="submit" value="Search"/>
+        <button class="btn btn-dark" style="text-decoration:none">
             @Html.ActionLink("Clear Filter", "Index")
         </button>
     </p>
@@ -100,7 +100,14 @@
                    @if (item.ApprovalStatus.Equals("Under Evaluation"))
                    {
     
-                        <a asp-action="Approve" asp-route-id="@item.Id">Approve</a>
+                        <form asp-action="Approve" asp-route-id="@item.Id">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+
+                        @*<form asp-controller="Index" asp-action="Reject" asp-route-id="@item.Id">
+                            <button type="submit" class="btn btn-success">Reject</button>
+                           </form>*@
+
                         <a asp-action="Reject" asp-route-id="@item.Id">Reject</a>
                                             
                    }

@@ -102,7 +102,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
 
 
-        //DeleteVote([route]idofrequest)
+        /*//DeleteVote([route]idofrequest)
         [HttpDelete("[action]/{id}")]
         [Authorize(Policy = "RequirePublicUserRole")]
         public async Task<ActionResult> DeleteVote([FromRoute] int? id)
@@ -126,10 +126,40 @@ namespace MUSM_api_MVCwebapp.Controllers
             await _db.SaveChangesAsync();
 
             return Ok("Successfully deleted");
+        }*/
 
-        }
+
+
+            [HttpDelete("[action]")]
+            [Authorize(Policy = "RequirePublicUserRole")]
+            public async Task<ActionResult> RemoveVote([FromBody] VoteModel vote)
+            {
+
+                var request = await _db.Requests.FindAsync(vote.RequestId);
+                if (request == null)
+                {
+                    return NotFound();
+                }
+
+                var user = await _db.Users.FindAsync(vote.PublicUserId);
+                if (user == null || !vote.PublicUserId.Equals(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                {
+                    return NotFound();
+                }
+
+                
+                 _db.Votes.Remove(vote);
+
+                await _db.SaveChangesAsync();
+
+                return Ok("Vote Removed Succefully");
+
+            }
+
 
         
+
+
 
 
 

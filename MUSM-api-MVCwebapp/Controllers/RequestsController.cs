@@ -142,9 +142,6 @@ namespace MUSM_api_MVCwebapp.Controllers
         #endregion 
 
         #region Reject Request
-        // POST: Requests/Rejected/5
-        [HttpPost, ActionName("Reject")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int id)
         {
             if (id <= 0)
