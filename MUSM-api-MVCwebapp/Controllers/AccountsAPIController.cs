@@ -57,7 +57,7 @@ namespace MUSM_api_MVCwebapp.Controllers
             {
                 await _userManager.AddToRoleAsync(user, UserRegisterDto.Role);
                 
-                return Created("", new { id = user.Id, username = user.UserName, email = user.Email, status = 1, message = "Registration Successful" });
+                return Created("", new {username = user.UserName, email = user.Email, status = 1, message = "Registration Successful" });
                
             }
 
@@ -117,7 +117,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
 
-                return Ok(new { token = tokenHandler.WriteToken(token), email = user.Email, name = user.FullName });
+                return Ok(new { token = tokenHandler.WriteToken(token), id = user.Id, email = user.Email, name = user.FullName });
 
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -47,14 +48,17 @@ namespace MUSM_api_MVCwebapp.Controllers
         // GET: Tasks
         [Authorize(Policy = "RequireManagerOrWorkerRole")]
        
-        public async Task<IActionResult> Index(bool showDeleted, bool ascending, string? searchString, List<string> SelectedPriority, List<string> SelectedStatuses, List<string> SelectedCategories)
+        public async Task<IActionResult> Index(bool showOnlyMyTasks, bool showDeleted, bool ascending, string? searchString, List<string> SelectedPriority, List<string> SelectedStatuses, List<string> SelectedCategories)
         {
             List<TaskModel>? tasksList = null;
 
             IQueryable<TaskModel> result = _context.Tasks.Include(r => r.Worker);
 
             //Do not return deleted tasks if showDeleted==false
-
+            if (showOnlyMyTasks)
+            {
+                result = result.Where(task => task.WorkerId == User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            }
             if (!showDeleted)
             {
                 result = result.Where(task => task.Deleted == false);

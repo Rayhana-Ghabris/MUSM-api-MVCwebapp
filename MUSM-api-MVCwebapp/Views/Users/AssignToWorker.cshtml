@@ -1,0 +1,49 @@
+﻿@*@model MUSM_api_MVCwebapp.Data.AppUser
+
+@{
+    ViewData["Title"] = "AssignToWorker";
+}
+
+
+<h1>Workers</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>FullName</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>CreatedAt</th>
+            <th>@Html.DisplayNameFor(user => user.Deleted)</th>
+
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in )
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>@user.CreatedAt</td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Deleted)
+                </td>
+                <td>
+
+                    <a class="btn btn-primary" asp-controller="Users" asp-action="AssignToWorker" asp-route-Id="@user.Id">Select</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+*@

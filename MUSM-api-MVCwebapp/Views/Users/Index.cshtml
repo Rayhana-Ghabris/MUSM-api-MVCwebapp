@@ -1,0 +1,84 @@
+﻿@model IEnumerable<MUSM_api_MVCwebapp.Dtos.UserDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>User Roles</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        SearchBox: @Html.TextBox("SearchString")
+    </p>
+
+    <p>
+        Filter By Role: @Html.ListBox("SelectedRoles")
+    </p>
+
+    <p>
+        Show Deleted: @Html.CheckBox("showDeleted")
+        Sort By Oldest: @Html.CheckBox("ascending")
+    </p>
+
+    <p>
+        <input type="submit" value="Search" />
+        <button>
+            @Html.ActionLink("Clear Filter", "Index")
+        </button>
+    </p>
+
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>FullName</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>CreatedAt</th>
+            <th>@Html.DisplayNameFor(user => user.Deleted)</th>
+            
+
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>@user.CreatedAt</td>
+                <td>
+                    @Html.DisplayFor(modelItem => user.Deleted)
+                </td>
+                <td>
+                 
+
+                 @if(@user.Role.Equals("Worker")  || @user.Role.Equals("PublicUser"))
+                 {
+
+                    <a class="btn btn-primary" asp-controller="Users" asp-action="Edit" asp-route-Id="@user.Id">Edit</a>
+                    <a class="btn btn-primary" asp-controller="Users" asp-action="ChangePassword" asp-route-Id="@user.Id">Change Password</a>
+
+                    @if (user.Deleted == false)
+                    {
+                        <a class="btn btn-primary" asp-controller="Users" asp-action="Delete" asp-route-Id="@user.Id">Delete</a>
+                    }else{
+
+                        <a class="btn btn-primary" asp-controller="Users" asp-action="UndoDelete" asp-route-Id="@user.Id">UndoDelete</a>
+
+                    }
+                }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

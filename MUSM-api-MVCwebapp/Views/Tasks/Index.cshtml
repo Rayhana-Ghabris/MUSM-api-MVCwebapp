@@ -1,4 +1,8 @@
-﻿@model IEnumerable<MUSM_api_MVCwebapp.Models.TaskModel>
+﻿@using Microsoft.AspNetCore.Authorization
+
+@inject IAuthorizationService AuthorizationService
+
+@model IEnumerable<MUSM_api_MVCwebapp.Models.TaskModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -28,6 +32,14 @@
         Show Deleted: @Html.CheckBox("showDeleted")
         Sort By Oldest: @Html.CheckBox("ascending")
     </p>
+
+    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireWorkerRole")).Succeeded)
+    {
+        <p>
+            Show Only My Tasks: @Html.CheckBox("showOnlyMyTasks")
+
+        </p>  
+     }
 
     <p>
         <input type="submit" value="Search" />
@@ -115,18 +127,24 @@
                 @Html.DisplayFor(modelItem => item.Deleted)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="AssignToWorker" asp-route-id="@item.Id">Assign to a Worker</a>
+                    
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
 
-                    @if (item.Deleted == true)
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
                     {
-                        <a asp-action="UndoDelete" asp-route-id="@item.Id">Undo Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="AssignToWorker" asp-route-id="@item.Id">Assign to a Worker</a>
+
+                        @if (item.Deleted == true)
+                        {
+                            <a asp-action="UndoDelete" asp-route-id="@item.Id">Undo Delete</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
                     }
-                    else
-                    {
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    }
+                   
 
 
             </td>
