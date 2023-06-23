@@ -61,6 +61,11 @@
                 </td>
                 <td>
                  
+                     @if(@user.Role.Equals("Worker") ){
+
+                        <a class="btn btn-primary" asp-controller="Tasks" asp-action="TasksOfWorker" asp-route-workerId="@user.Id">Show Assigned Tasks</a>
+                     }
+
 
                  @if(@user.Role.Equals("Worker")  || @user.Role.Equals("PublicUser"))
                  {

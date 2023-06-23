@@ -34,6 +34,8 @@ namespace MUSM_api_MVCwebapp.Controllers
             _appSettings = appSettings.Value;
         }
 
+        #region CreateUserWithRole
+
         [HttpPost("[action]")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateUserWithRole([FromBody] UserCreationDto UserRegisterDto)
@@ -72,6 +74,11 @@ namespace MUSM_api_MVCwebapp.Controllers
             return BadRequest(new JsonResult(errorList));
 
         }
+        #endregion
+
+
+
+        #region Login
 
         [HttpPost("[action]")]
         [AllowAnonymous]
@@ -126,7 +133,7 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Unauthorized(new { LoginError = "Please Check the Login Credentials - Ivalid Username/Password" });
 
         }
-
+        #endregion
 
     }
 }

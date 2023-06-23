@@ -30,7 +30,10 @@ namespace MUSM_api_MVCwebapp.Controllers
             _mapper = mapper;
             _votesService = votesService;
         }
-        
+
+
+        #region GetRequests
+
         [HttpGet("[action]")]
         [Authorize(Policy = "RequirePublicUserRole")]
         public async Task<ActionResult> GetRequests([FromQuery] string? categorySearch, [FromQuery] string? locationSearch, [FromQuery] string? keyword)
@@ -66,6 +69,10 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return Ok(requestsList);
         }
+        #endregion
+
+
+        #region GetMyRequests
 
         //GetRequest([route]id)*
         [HttpGet("[action]/{id}")]
@@ -87,6 +94,10 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Ok(requestsList);
 
         }
+        #endregion
+
+
+        #region GetRequestCompletionStatus
 
         //GetRequestCompletionStatus([route]idofrequest)
         [HttpGet("[action]/{id}")]
@@ -106,6 +117,10 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Ok(task.CompletionStatus);
 
         }
+        #endregion
+
+
+        #region UpdateRequest
 
         //change createRequest-->PostRequest*
         //UpdateRequest([route]idofrequest, [body]updatedrequest)
@@ -141,6 +156,10 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return Ok("Successfully updated");
         }
+        #endregion
+
+
+        #region DeleteRequest
 
         //DeleteRequest([route]idofrequest) deleted=true
         [HttpDelete("[action]/{id}")]
@@ -169,10 +188,12 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Ok("Successfully deleted");
 
         }
+        #endregion
+
+
+        #region CreateRequest
 
         //URL: https://localhost:7058/api/requestsapi/PostRequest
-
-
         [HttpPost("[action]")]
         [Authorize(Policy = "RequirePublicUserRole")]
         public async Task<ActionResult> PostRequest([FromBody] RequestDto data)
@@ -191,5 +212,6 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Created("", createRequest.Entity);
 
         }
+        #endregion
     }
 }

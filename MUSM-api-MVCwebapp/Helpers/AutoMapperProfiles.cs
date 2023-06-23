@@ -14,6 +14,9 @@ namespace MUSM_api_MVCwebapp.Helpers
             CreateMap<RequestDto, RequestModel>();
             CreateMap<TaskDto, TaskModel>();
             CreateMap<AppUser, UserDto>();
+            CreateMap<TaskModel, EditTaskDto>();
+            CreateMap<EditTaskDto, TaskModel>();
+
 
         }
     }

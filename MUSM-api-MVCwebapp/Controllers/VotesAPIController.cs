@@ -28,9 +28,11 @@ namespace MUSM_api_MVCwebapp.Controllers
             _votesService = votesService;
         }
 
+        #region IsVoted
+
         [HttpGet("[action]/{id}")]
         [Authorize(Policy = "RequirePublicUserRole")]
-        public async Task<IActionResult> GetVoted([FromRoute] int? id)
+        public async Task<IActionResult> IsVoted([FromRoute] int? id)
         {
 
             if (id == null || _db.Votes == null)
@@ -55,10 +57,13 @@ namespace MUSM_api_MVCwebapp.Controllers
             return Ok(false);
 
         }
+        #endregion
+
+        #region VoteOnRequest
 
         [HttpPost("[action]")]
         [Authorize(Policy = "RequirePublicUserRole")]
-        public async Task<ActionResult> VoteToRequest([FromBody] VoteModel vote)
+        public async Task<ActionResult> VoteOnRequest([FromBody] VoteModel vote)
         {
 
             var request = await _db.Requests.FindAsync(vote.RequestId);
@@ -78,10 +83,12 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             await _db.SaveChangesAsync();
 
-            return Ok("Vote Created Succefully");
+            return Ok("Vote Created Successfully");
 
         }
+        #endregion
 
+        #region CountVotes
 
         //CountVote([route]idofrequest)
         [HttpGet("[action]/{id}")]
@@ -97,17 +104,16 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             return Ok(countVotes);
         }
+        #endregion
 
+        #region RemoveVote
 
-       
+        [HttpDelete("[action]")]
+        [Authorize(Policy = "RequirePublicUserRole")]
+        public async Task<ActionResult> RemoveVote([FromBody] VoteModel vote)
+        {
 
-
-            [HttpDelete("[action]")]
-            [Authorize(Policy = "RequirePublicUserRole")]
-            public async Task<ActionResult> RemoveVote([FromBody] VoteModel vote)
-            {
-
-                var request = await _db.Requests.FindAsync(vote.RequestId);
+            var request = await _db.Requests.FindAsync(vote.RequestId);
                 if (request == null)
                 {
                     return NotFound();
@@ -132,12 +138,7 @@ namespace MUSM_api_MVCwebapp.Controllers
                 return Ok("Vote Removed Succefully");
 
             }
-
-
-        
-
-
-
+        #endregion
 
 
     }

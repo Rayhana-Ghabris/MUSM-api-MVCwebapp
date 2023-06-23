@@ -1,4 +1,8 @@
-﻿@model MUSM_api_MVCwebapp.Models.TaskModel
+﻿@using Microsoft.AspNetCore.Authorization
+
+@inject IAuthorizationService AuthorizationService
+
+@model MUSM_api_MVCwebapp.Dtos.EditTaskDto
 
 @{
     ViewData["Title"] = "Edit";
@@ -11,23 +15,85 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
+            {
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Location" class="control-label"></label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div> 
+
+                <label asp-for="Priority" class="control-label">Priority</label>
+                <div class="form-control">
+                    <label>
+                        <input type="radio" asp-for="Priority" value="Low" />
+                        Low
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Priority" value="Medium" />
+                        Medium
+                    </label>
+                    <label>
+                        <input type="radio" asp-for="Priority" value="High" />
+                        High
+                    </label>
+                </div>
+                <span asp-validation-for="Priority" class="text-danger"></span>
+
+                <div class="form-group">
+                    <label asp-for="Category" class="control-label">Category</label>
+                    <div class="form-control">
+                        <label>
+                            <input type="radio" asp-for="Category" value="Electrical" />
+                            Electrical
+                        </label>
+                        <label>
+                            <input type="radio" asp-for="Category" value="Technological" />
+                            Technological
+                        </label>
+                        <label>
+                            <input type="radio" asp-for="Category" value="Plumbing" />
+                            Plumbing
+                        </label>
+                        <label>
+                            <input type="radio" asp-for="Category" value="Construction" />
+                            Construction
+                        </label>
+                        <label>
+                            <input type="radio" asp-for="Category" value="Carpentry" />
+                            Carpentry
+                        </label>
+                    </div>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DueDate" class="control-label"></label>
+                    <input asp-for="DueDate" class="form-control" />
+                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="WorkerId" class="control-label"></label>
+                <select asp-for="WorkerId" class="form-control" asp-items="ViewBag.WorkerId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
+
+                <div class="form-group">
+                    <input type="submit" asp-action="AssignToWorker" value="Assign to a Worker" class="btn btn-primary" />
+                </div>
+
+            }
             <div class="form-group">
                 <label asp-for="CompletionStatus" class="control-label">Completion Status</label>
                 <div class="form-control">
@@ -53,90 +119,15 @@
                     </label>
 
                 </div>
-                
+
                 <span asp-validation-for="CompletionStatus" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="Priority" class="control-label"></label>
-                <input asp-for="Priority" class="form-control" />
-                <span asp-validation-for="Priority" class="text-danger"></span>
-            </div>*@
-
-            <label asp-for="Priority" class="control-label">Priority</label>
-            <div class="form-control">
-                <label>
-                    <input type="radio" asp-for="Priority" value="Low" />
-                    Low
-                </label>
-                <label>
-                    <input type="radio" asp-for="Priority" value="Medium" />
-                    Medium
-                </label>
-                <label>
-                    <input type="radio" asp-for="Priority" value="High" />
-                    High
-                </label>
-            </div>
-            <span asp-validation-for="Priority" class="text-danger"></span>
-
-            <div class="form-group">
-                <label asp-for="Category" class="control-label">Category</label>
-                <div class="form-control">
-                    <label>
-                        <input type="radio" asp-for="Category" value="Electrical" />
-                        Electrical
-                    </label>
-                    <label>
-                        <input type="radio" asp-for="Category" value="Technological" />
-                        Technological
-                    </label>
-                    <label>
-                        <input type="radio" asp-for="Category" value="Plumbing" />
-                        Plumbing
-                    </label>
-                    <label>
-                        <input type="radio" asp-for="Category" value="Construction" />
-                        Construction
-                    </label>
-                    <label>
-                        <input type="radio" asp-for="Category" value="Carpentry" />
-                        Carpentry
-                    </label>
-                </div>
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DueDate" class="control-label"></label>
-                <input asp-for="DueDate" class="form-control" />
-                <span asp-validation-for="DueDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="WorkerId" class="control-label"></label>
-                <select asp-for="WorkerId" class="form-control" asp-items="ViewBag.WorkerId"></select>
-            </div>
-
-
-            <!--<div class="form-group">
-                <label asp-for="RequestId" class="control-label"></label>
-                <select asp-for="RequestId" class="form-control" asp-items="ViewBag.RequestId"></select>
-                <span asp-validation-for="RequestId" class="text-danger"></span>
-            </div>-->
-            
-            <!--<div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Deleted" /> @Html.DisplayNameFor(model => model.Deleted)
-                </label>
-            </div>-->
+           
             <div class="form-group">
                 <input type="submit" value="Submit" class="btn btn-primary" />
             </div>
-            <!--<div class="form-group">
-                <input type="" value="Cancel" class="btn btn-primary" />
-            </div>-->
-            <div class="form-group">
-                <input type="submit" value="Assign to a Worker" class="btn btn-primary" />
-            </div>
+            
+           
         </form>
     </div>
 </div>

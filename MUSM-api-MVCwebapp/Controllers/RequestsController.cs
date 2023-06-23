@@ -37,6 +37,8 @@ namespace MUSM_api_MVCwebapp.Controllers
             _votesService = votesService;
         }
 
+
+
         #region Index
         // TODO paging + filtering 
         // 1- Order by CreatedAt: ascending: true - descending: false 
@@ -46,8 +48,6 @@ namespace MUSM_api_MVCwebapp.Controllers
         //          b) ApprovalStatus : Approved, Rejected, Under Evaluation
         // GET: Requests
 
-
-       
         [Authorize(Policy = "RequireManagerRole")]
         public ActionResult Index(bool showDeleted, bool ascending, string? searchString, List<string> SelectedCategories, List<string> SelectedStatuses)
         {
@@ -137,9 +137,10 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
-        [Authorize(Policy = "RequireManagerRole")]
+
         #region Approve Request
         // GET: Requests/Approve/5
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Approve(int? id)
         {
             if (id == null || _context.Requests == null)
@@ -157,8 +158,6 @@ namespace MUSM_api_MVCwebapp.Controllers
             return RedirectToAction("Create", "Tasks", requestModel);
         }
         #endregion
-
-
 
         #region Reject Request
 
@@ -287,10 +286,12 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
+        #region RequestModelExists
         private bool RequestModelExists(int id)
         {
             return (_context.Requests?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        #endregion
 
         public async Task<IActionResult> ClearFilter()
         {

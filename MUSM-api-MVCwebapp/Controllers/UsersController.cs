@@ -31,14 +31,12 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
 
 
-
-
         #region Index
         // 1- Order by CreatedAt: ascending: true - descending: false 
         // 2- Search Box: Id, User.FullName, Email
         // 3- Filters:
         //           Roles: "Worker", "PublicUser"
-
+        [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Index(bool showDeleted, bool ascending, string? searchString, List<string> SelectedRoles)
         {
 
@@ -111,6 +109,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
+
         #region Create
         [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Create()
@@ -123,6 +122,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         #region CreateUserWithRole
 
+        [Authorize(Policy = "RequireManagerRole")]
         [HttpPost, ActionName("Create")]
         public async Task<IActionResult> CreateUserWithRole(UserCreationDto UserRegisterDto)
         {
@@ -194,7 +194,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
-        #region Edit
+        #region Edit User
 
         [Authorize(Policy = "RequireManagerRole")]
         [HttpPost]
@@ -242,7 +242,8 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
-        #region ChangePassword
+
+        #region GET:ChangePassword
         [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> ChangePassword(string? id)
         {
@@ -271,7 +272,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
-        #region 
+        #region ChangePassword
 
         [Authorize(Policy = "RequireManagerRole")]
         [HttpPost]
@@ -381,9 +382,12 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
+
+        #region UserDtoExists
         private bool UserDtoExists(string email)
         {
             return (_context.Users?.Any(u => u.Email == email)).GetValueOrDefault();
         }
+        #endregion
     }
 }
