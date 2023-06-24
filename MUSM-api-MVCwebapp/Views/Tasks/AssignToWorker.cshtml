@@ -1,0 +1,52 @@
+﻿@model MUSM_api_MVCwebapp.Models.TaskModel
+
+@{
+    ViewData["Title"] = "AssignToWorker";
+}
+
+
+<h1>Workers</h1>
+
+<a asp-action="Index">No Need To Assign A Worker</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>FullName</th>
+            <th>Email</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in ViewBag.Workers)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+              
+                <td>
+
+                    <a class="btn btn-primary" asp-action="AssignToWorkerConfirmed" asp-route-WorkerId="@user.Id" asp-route-taskId="@ViewBag.TaskId">Select</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    
+
+    @if(ViewBag.requestId == 0)
+    {
+        <a asp-action="Index">Back to List</a>
+    }
+    else
+    {
+        <a asp-action="Index" asp-controller="Requests">Back to List</a>
+        
+    }
+</div>

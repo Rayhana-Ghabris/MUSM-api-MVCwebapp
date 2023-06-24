@@ -136,7 +136,7 @@
                     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
                     {
                         
-                        <a asp-action="AssignToWorker" asp-route-id="@item.Id">Assign to a Worker</a>
+                        <a asp-action="AssignToWorker" asp-route-taskId="@item.Id">Assign to a Worker</a>
 
                         @if (item.Deleted == true)
                         {

@@ -209,38 +209,47 @@ namespace MUSM_api_MVCwebapp.Controllers
         }
         #endregion
 
-        /*
+      
 
          #region GET: AssignToWorker
          // GET: AssignToWorker
          //[HttpGet("[action]/{requestModel}")]
 
          [Authorize(Policy = "RequireManagerRole")]
-         public async Task<IActionResult> AssignToWorker()
+         public async Task<IActionResult> AssignToWorker(int taskId, int requestId )
          {
-             return View();
+            ViewData["Workers"] = await _userManager.GetUsersInRoleAsync("Worker");
+            ViewData["TaskId"] = taskId;
+            ViewData["requestId"] = requestId;
+
+            return View();
+         }
+        #endregion
+
+      
+        #region GET: AssignToWorker
+        [Authorize(Policy = "RequireManagerRole")]
+         
+         public async Task<IActionResult> AssignToWorkerConfirmed(int taskId, string WorkerId)
+         {
+            var task = await _context.Tasks.FindAsync(taskId);
+
+            if (task == null)
+            {
+                return RedirectToAction(nameof(AssignToWorker), new { taskId });
+            }
+
+            task.WorkerId = WorkerId;
+
+            _context.Entry(task).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
          }
          #endregion
 
-         #region GET: AssignToWorker
-         [HttpPost]
-         [Authorize(Policy = "RequireManagerRole")]
-         public async Task<IActionResult> AssignToWorker(TaskModel taskModel, string id)
-         {
-             if (taskModel == null)
-             {
-                 return NotFound();
-             }
-
-             taskModel.WorkerId = await _userManager.SetUserNameAsync(user)
-
-
-             return View();
-         }
-         #endregion
-
-         */
-
+        
 
         #region Task Details
         // GET: Tasks/Details/5
@@ -279,9 +288,6 @@ namespace MUSM_api_MVCwebapp.Controllers
                 ViewData["Request"] = requestModel;
             }
 
-            // Get list of workers from db
-            ViewData["WorkerId"] = new SelectList(await _userManager.GetUsersInRoleAsync("Worker"), "Id", "FullName");
-
 
             return View();
         }
@@ -296,12 +302,13 @@ namespace MUSM_api_MVCwebapp.Controllers
         [ValidateAntiForgeryToken]
 
         [Authorize(Policy = "RequireManagerRole")]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Location,CompletionStatus,Priority,Category,DueDate,DateCompleted,WorkerId,RequestId")] TaskModel taskModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Location,CompletionStatus,Priority,Category,DueDate,DateCompleted,RequestId")] TaskModel taskModel)
         {
             taskModel.Id = 0;
             if (ModelState.IsValid)
             {
-                _context.Add(taskModel);
+                var task = _context.Tasks.Add(taskModel);
+
                 await _context.SaveChangesAsync();
 
                 if (taskModel.RequestId > 0)
@@ -315,10 +322,10 @@ namespace MUSM_api_MVCwebapp.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "Requests");
+                  
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AssignToWorker), new {taskId = task.Entity.Id , requestId = task.Entity.RequestId});
             }
 
             return View(taskModel);
@@ -396,15 +403,19 @@ namespace MUSM_api_MVCwebapp.Controllers
                     _context.Entry(task).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction(nameof(Index));
+                    if (User.FindFirst(ClaimTypes.Role).Value.Equals("Manager"))
+                    {
+                        return RedirectToAction(nameof(AssignToWorker), new { taskId = task.Id });
+                    }
 
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 { }
 
             }
             ViewData["RequestId"] = new SelectList(_context.Requests, "Id", "Description", taskDto.RequestId);
-            ViewData["WorkerId"] = new SelectList(await _userManager.GetUsersInRoleAsync("Worker"), "Id", "FullName");
+
             return View(taskDto);
         }
         #endregion
