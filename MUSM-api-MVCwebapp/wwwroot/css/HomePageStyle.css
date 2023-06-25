@@ -1,12 +1,15 @@
 ﻿.text-center {
+   
     position: center;
     font-weight: 500;
-    font-family:Tahoma
+    font-family: Tahoma
 }
 
-.main-img {
+.image-9-icon {
     position: center;
-    width: 300px;
-    height: 300px;
-    
+    top: 271px;
+    left: 366px;
+    width:350px;
+    height: 350px;
+    object-fit: cover;
 }
