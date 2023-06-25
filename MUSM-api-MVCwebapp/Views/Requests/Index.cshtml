@@ -4,35 +4,42 @@
     ViewData["Title"] = "Index";
 }
 
+<link rel="stylesheet" href="~/css/requests.css" />
 <h1>Index</h1>
 
 @using (Html.BeginForm())
 {
     <p>
         SearchBox: @Html.TextBox("SearchString")
-    </p>
-
-    <p>
+    
         Filter By Approval Status: @Html.ListBox("SelectedStatuses")
 
         Filter By Category: @Html.ListBox("SelectedCategories")
     </p>
-        
+
     <p>
-        Show Deleted: @Html.CheckBox("showDeleted")
-        Sort By Oldest: @Html.CheckBox("ascending")
+        @Html.CheckBox("showDeleted") Show Delete
+       
+    </p>
+    <p>
+        @Html.CheckBox("ascending") Sort By Oldest
     </p>
 
     <p>
-        <input type="submit" value="Search"/>
-        <button class="btn btn-dark" style="text-decoration:none">
-            @Html.ActionLink("Clear Filter", "Index")
-        </button>
+
+        <form>
+            <button class="btn btn-light" type="submit" value="Search">Search</button>
+
+            <button class="btn btn-light" style="text-decoration:none">
+                @Html.ActionLink("Clear Filter", "Index")
+            </button>
+        </form>
+       
 
     </p>
 
 }
-
+@*
 <table class="table">
     <thead>
         <tr>
@@ -97,10 +104,10 @@
                 @Html.DisplayFor(modelItem => item.Deleted)
             </td>
             <td>
-                                  
+
                    @if (item.ApprovalStatus.Equals("Under Evaluation"))
                    {
-    
+
                         <form asp-action="Approve" asp-route-id="@item.Id">
                             <button type="submit" class="btn btn-success">Approve</button>
                         </form>
@@ -109,14 +116,14 @@
                             <button type="submit" class="btn btn-success">Reject</button>
                            </form>*@
 
-                        <a asp-action="Reject" asp-route-id="@item.Id">Reject</a>
-                                            
+@*  <a asp-action="Reject" asp-route-id="@item.Id">Reject</a>
+
                    }
                    else
                    {
                         <a asp-action="UndoEvaluation" asp-route-id="@item.Id">Undo Evaluation</a>
                    }
-                
+
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a>
 
                     @if (item.Deleted == true)
@@ -134,3 +141,97 @@
 }
     </tbody>
 </table>
+*@
+
+
+
+
+@foreach (var item in Model)
+{
+    <div style="height: auto; padding-top:75px; position: relative;">
+        <table class="table" style="position: relative;">
+
+            <tr style="position: relative">
+                <td style="position: relative">
+                        <div class="requests5" data-scroll-to="requestsContainer">
+                                <div class="container">
+                                    <b class="broken-door-handle"> @Html.DisplayFor(modelItem => item.Title)</b>
+                                    <div class="something-seems-to">
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </div>
+                                    <div class="location">
+                                        <div class="location1">  @Html.DisplayNameFor(model => model.Location)</div>
+                                        <div class="room-b-101"> @Html.DisplayFor(modelItem => item.Location)</div>
+                                    </div>
+                                   
+                                    <div class="category">
+                                        <div class="category-child"></div>
+                                        <div class="carpentry24"> @Html.DisplayFor(modelItem => item.Category)</div>
+                                        <div class="carpentry25">
+                                            <img class="carpentry-child9"
+                                                 alt=""
+                                                 src="~/public/ellipse-482.svg" />
+
+                                            <img class="image-2-icon12"
+                                                 alt=""
+                                                 src="~/public/image-22@2x.png" />
+                                        </div>
+                                    </div>
+                                    <img class="request-child"
+                                         alt=""
+                                         src="./public/rectangle-28@2x.png" />
+
+                            <div class="button-wrapper">
+
+
+                                @if (item.ApprovalStatus.Equals("Under Evaluation"))
+                                    {
+                                        <p>
+
+                                        <form >
+                                        <button asp-action="Approve" asp-route-id="@item.Id" type="submit" class="btn fill">Approve</button>
+                                        
+
+
+                                        @*<form asp-action="Reject" asp-route-id="@item.Id">*@
+                                            <button asp-action="Reject" asp-route-id="@item.Id" type="submit" class="btn outline1">Reject</button>
+                                        </form>
+                                    </p>
+                                    }
+                                    else
+                                    {   <p>
+                                        <form asp-action="UndoEvaluation" asp-route-id="@item.Id">
+                                        <button type="submit" class="btn outline1">Undo Evaluation</button>
+                                        </form>
+                                    </p>
+                                    }
+
+                                    <form asp-action="Details" asp-route-id="@item.Id">
+                                        <button type="submit" class="btn fill">Details</button>
+                                    </form>
+
+                                    @if (item.Deleted == true)
+                                    {
+                                        <form asp-action="UndoDelete" asp-route-id="@item.Id">
+                                            <button type="submit" class="btn fill1">Undo Delete</button>
+                                         </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="Delete" asp-route-id="@item.Id">
+                                        <button type="submit" class="btn fill1">Delete</button>
+                                         </form>
+                                    }
+
+                            </div>
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+
+        </table>
+    </div>
+}
+
