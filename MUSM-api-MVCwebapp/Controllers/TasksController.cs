@@ -26,7 +26,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         private readonly IMapper _mapper;
 
         private readonly List<string> CompletionStatuses = new List<string> {
-            "Open","Assigned","in Progress", "on Hold", "Done"
+            "Open","Assigned","InProgress", "OnHold", "Done"
         };
 
         private readonly List<string> Priority = new List<string> {
@@ -124,7 +124,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             tasksList = result.ToList();
 
-            ViewData["SelectedStatuses"] = new SelectList(CompletionStatuses);
+            ViewData["ComplitionStatuses"] = CompletionStatuses;
             ViewData["SelectedCategories"] = new SelectList(Categories);
             ViewData["SelectedPriority"] = new SelectList(Priority);
 
@@ -283,7 +283,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         [Authorize(Policy = "RequireManagerRole")]
         public async Task<IActionResult> Create(RequestModel? requestModel)
         {
-            if (requestModel.Id > 0)
+            if (requestModel != null && requestModel.Id > 0)
             {
                 ViewData["Request"] = requestModel;
             }
