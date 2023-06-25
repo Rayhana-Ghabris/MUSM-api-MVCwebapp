@@ -13,6 +13,8 @@ namespace MUSM_api_MVCwebapp.Data
 
         public bool Deleted { get; set; } = false;
 
+        public string? Speciality { get; set; }
+
         public List<TaskModel>? Tasks { get; set; }
 
         public List<RequestModel>? Requests { get; set; }

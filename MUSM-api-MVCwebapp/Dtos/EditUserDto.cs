@@ -18,5 +18,7 @@ namespace MUSM_api_MVCwebapp.Dtos
         [RegularExpression("^[A-Za-z]+$")]
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
+
+        public string? Speciality { get; set; }
     }
 }
