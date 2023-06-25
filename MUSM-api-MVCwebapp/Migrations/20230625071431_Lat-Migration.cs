@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MUSM_api_MVCwebapp.Migrations
 {
-    public partial class MigrationrequestIDnullable : Migration
+    public partial class LatMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,6 +29,8 @@ namespace MUSM_api_MVCwebapp.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -245,17 +247,22 @@ namespace MUSM_api_MVCwebapp.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "1", null, "Manager", "MANAGER" });
+                values: new object[,]
+                {
+                    { "1", null, "Manager", "MANAGER" },
+                    { "2", null, "Worker", "WORKER" },
+                    { "3", null, "PublicUser", "PUBLICUSER" }
+                });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2", null, "Worker", "WORKER" });
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Deleted", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "7005685e-515b-441f-ab72-355724c1c40a", 0, "dc86df47-94bb-476a-894d-ca25e14c9813", new DateTime(2023, 6, 25, 10, 14, 31, 622, DateTimeKind.Local).AddTicks(4589), false, "manager@mu.edu.lb", true, "Manager", false, null, "MANAGER@MU.EDU.LB", "MANAGER@MU.EDU.LB", "AQAAAAEAACcQAAAAEC6rK5TRHGeXrJ1LtZFyKXDq+6XCQmxvYV0BDp2P10JESYdtA/EUBHqT3WXouCLDCA==", "1234567890", true, "df5d5050-1d62-41ac-b174-3232131655ef", false, "manager@mu.edu.lb" });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "3", null, "PublicUser", "PUBLICUSER" });
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "1", "7005685e-515b-441f-ab72-355724c1c40a" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

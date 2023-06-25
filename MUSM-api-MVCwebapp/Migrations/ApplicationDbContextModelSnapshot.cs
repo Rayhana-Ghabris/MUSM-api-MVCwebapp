@@ -17,7 +17,7 @@ namespace MUSM_api_MVCwebapp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "6.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -156,6 +156,13 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "7005685e-515b-441f-ab72-355724c1c40a",
+                            RoleId = "1"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -252,6 +259,28 @@ namespace MUSM_api_MVCwebapp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "7005685e-515b-441f-ab72-355724c1c40a",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "dc86df47-94bb-476a-894d-ca25e14c9813",
+                            CreatedAt = new DateTime(2023, 6, 25, 10, 14, 31, 622, DateTimeKind.Local).AddTicks(4589),
+                            Deleted = false,
+                            Email = "manager@mu.edu.lb",
+                            EmailConfirmed = true,
+                            FullName = "Manager",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MANAGER@MU.EDU.LB",
+                            NormalizedUserName = "MANAGER@MU.EDU.LB",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC6rK5TRHGeXrJ1LtZFyKXDq+6XCQmxvYV0BDp2P10JESYdtA/EUBHqT3WXouCLDCA==",
+                            PhoneNumber = "1234567890",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "df5d5050-1d62-41ac-b174-3232131655ef",
+                            TwoFactorEnabled = false,
+                            UserName = "manager@mu.edu.lb"
+                        });
                 });
 
             modelBuilder.Entity("MUSM_api_MVCwebapp.Models.RequestModel", b =>
