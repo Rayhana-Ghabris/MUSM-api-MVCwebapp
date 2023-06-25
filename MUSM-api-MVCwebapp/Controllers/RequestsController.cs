@@ -107,8 +107,8 @@ namespace MUSM_api_MVCwebapp.Controllers
             }
 
             ViewData["SelectedStatuses"] = new SelectList(ApprovalStatuses);
-            ViewData["SelectedCategories"] = new SelectList(Categories);
-
+            ViewData["SelectedCategories"] = Categories;
+           
             return View(requestsList);
         }
         #endregion

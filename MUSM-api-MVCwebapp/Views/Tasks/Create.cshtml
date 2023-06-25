@@ -70,26 +70,21 @@
                 </div>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <label asp-for="DueDate" class="control-label"></label>
                 <input asp-for="DueDate" class="form-control" />
                 <span asp-validation-for="DueDate" class="text-danger"></span>
             </div>
-           
+
             @if (ViewBag.Request != null)
             {
                 <div class="form-group">
                     <label asp-for="RequestId" class="control-label"></label>
-                    <input asp-for="RequestId" class="form-control" readonly value=@ViewBag.Request.Id/>
+                    <input asp-for="RequestId" class="form-control" readonly value=@ViewBag.Request.Id />
                 </div>
             }
-@*
-            <div class="form-group">
-                <label asp-for="WorkerId" class="control-label"></label>
-                <select asp-for="WorkerId" class ="form-control" asp-items="ViewBag.WorkerId"></select>
-            </div>
-            *@
+
             <div class="form-group">
                 <input type="submit" value="Next" class="btn btn-primary" />
             </div>
@@ -98,9 +93,10 @@
 </div>
 
 <div>
-    @if(ViewBag.Request != null){
+    @if (ViewBag.Request != null)
+    {
 
-        <a asp-controller="Requests" asp-action="Index" >Back to List</a>
+        <a asp-controller="Requests" asp-action="Index">Back to List</a>
     }
     else
     {
@@ -109,5 +105,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

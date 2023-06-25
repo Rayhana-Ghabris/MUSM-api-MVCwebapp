@@ -1,8 +1,18 @@
-﻿@model IEnumerable<MUSM_api_MVCwebapp.Models.RequestModel>
+﻿@using Microsoft.AspNetCore.Authorization
+
+@inject IAuthorizationService AuthorizationService
+
+@model IEnumerable<MUSM_api_MVCwebapp.Models.RequestModel>
 
 @{
     ViewData["Title"] = "Index";
 }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="stylesheet" href="~/css/global.css" />
+    <link rel="stylesheet" href="~/css/requests.css" />
+</head>
 
 <h1>Index</h1>
 
@@ -10,29 +20,137 @@
 {
     <p>
         SearchBox: @Html.TextBox("SearchString")
-    </p>
-
-    <p>
+    
         Filter By Approval Status: @Html.ListBox("SelectedStatuses")
 
-        Filter By Category: @Html.ListBox("SelectedCategories")
-    </p>
-        
-    <p>
-        Show Deleted: @Html.CheckBox("showDeleted")
-        Sort By Oldest: @Html.CheckBox("ascending")
+       
     </p>
 
     <p>
-        <input type="submit" value="Search"/>
-        <button class="btn btn-dark" style="text-decoration:none">
-            @Html.ActionLink("Clear Filter", "Index")
-        </button>
+        @Html.CheckBox("showDeleted") Show Delete
+       
+    </p>
+    <p>
+        @Html.CheckBox("ascending") Sort By Oldest
+    </p>
+
+    <p>
+
+        <form>
+            <button class="btn btn-warning" type="submit" value="Search">Search</button>
+
+            <button class="btn btn-secondary" style="text-decoration:none">
+                @Html.ActionLink("Clear Filter", "Index")
+            </button>
+        </form>
+       
 
     </p>
 
 }
+<table class="table">
 
+    <div style="display: flex;">
+        @foreach (var category in ViewBag.SelectedCategories)
+        {
+            <div class="column-17">
+                <div class="category-box category-@category-color">
+                    <div class="category-name">@category</div>
+                    <img class="file-dock-icon1" src="~/public/@category-icon.png" />
+                    
+                </div>
+
+                @foreach (var item in Model)
+                {
+                    @if (item.Category.Equals(category))
+                    {
+                        <div class="task18">
+                            <div class="task-details-parent16">
+                                <div class="task-details19">
+                                    <b class="broken-door-handle29">@item.Title</b>
+                                    <div class="location-due-date18">
+                                        <div class="room-b-10128">@item.Location</div>
+                                        <b class="b18">•</b>
+                                    </div>
+                                    <div class="something-seems-to28">
+                                        @item.Description
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="buttons25">
+
+                              
+                                @if (item.ApprovalStatus.Equals("Under Evaluation"))
+                                {
+                                    <div class="assign8" id="assignContainer">
+                                        <a form asp-action="Approve" asp-route-id="@item.Id">Approve</a>
+                                    </div>
+                                    <div class="assign8" id="assignContainer">
+                                    <a form asp-action="Reject" asp-route-id="@item.Id">Reject</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="edit12">
+                                    <a asp-action="UndoEvaluation" asp-route-id="@item.Id">Undo Evaluation</a>
+                                    </div>
+                                }
+
+                                 <div class="details49">
+                                    <a class="edit13 buttonInCard" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                 </div>
+
+                                <div class="edit12">
+                                        @if (item.Deleted == true)
+                                        {
+                                            <a asp-action="UndoDelete" asp-route-id="@item.Id">Undo Delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        }
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    }
+
+                }
+
+            </div>
+        }
+
+    </div>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
 <table class="table">
     <thead>
         <tr>
@@ -97,10 +215,10 @@
                 @Html.DisplayFor(modelItem => item.Deleted)
             </td>
             <td>
-                                  
+
                    @if (item.ApprovalStatus.Equals("Under Evaluation"))
                    {
-    
+
                         <form asp-action="Approve" asp-route-id="@item.Id">
                             <button type="submit" class="btn btn-success">Approve</button>
                         </form>
@@ -109,14 +227,14 @@
                             <button type="submit" class="btn btn-success">Reject</button>
                            </form>*@
 
-                        <a asp-action="Reject" asp-route-id="@item.Id">Reject</a>
-                                            
+@*  <a asp-action="Reject" asp-route-id="@item.Id">Reject</a>
+
                    }
                    else
                    {
                         <a asp-action="UndoEvaluation" asp-route-id="@item.Id">Undo Evaluation</a>
                    }
-                
+
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a>
 
                     @if (item.Deleted == true)
@@ -134,3 +252,7 @@
 }
     </tbody>
 </table>
+*@
+
+
+

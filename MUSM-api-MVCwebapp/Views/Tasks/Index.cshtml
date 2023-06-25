@@ -5,153 +5,139 @@
 @model IEnumerable<MUSM_api_MVCwebapp.Models.TaskModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tasks List";
 }
 
-<h1>Index</h1>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="stylesheet" href="~/css/global.css" />
+    <link rel="stylesheet" href="~/css/AllTasks.css" />
+</head>
+
+<h1>Tasks List</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create">Create New</a>
 </p>
 
 @using (Html.BeginForm())
 {
     <p>
         SearchBox: @Html.TextBox("SearchString")
-    </p>
-
-    <p>
-        Filter By Completion Status: @Html.ListBox("SelectedStatuses")
-
+  
         Filter By Category: @Html.ListBox("SelectedCategories")
 
         Filter By Priority: @Html.ListBox("SelectedPriority")
     </p>
-        
+
     <p>
-        Show Deleted: @Html.CheckBox("showDeleted")
-        Sort By Oldest: @Html.CheckBox("ascending")
-        Sort By DueDate: @Html.CheckBox("dueDate")
-        
+        @Html.CheckBox("showDeleted") Show Deleted
     </p>
+    <p>
+        @Html.CheckBox("ascending") Sort By Oldest
+    </p>
+    <p>
+        @Html.CheckBox("dueDate") Sort By DueDate
+    </p>
+        
+
+    
 
     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireWorkerRole")).Succeeded)
     {
         <p>
-            Show Only My Tasks: @Html.CheckBox("showOnlyMyTasks")
+            @Html.CheckBox("showOnlyMyTasks") Show Only My Tasks
 
-        </p>  
-     }
+        </p>
+    }
 
     <p>
-        <input type="submit" value="Search" />
-        <button>
-            @Html.ActionLink("Clear Filter", "Index")
-        </button>
-    </p>
 
+        <form>
+            <button class="btn btn-warning" type="submit" value="Search">Search</button>
+
+            <button class="btn btn-secondary" style="text-decoration:none">
+                @Html.ActionLink("Clear Filter", "Index")
+            </button>
+        </form>
+
+
+    </p>
 }
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CompletionStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Priority)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DueDate)
-            </th>
-            <!--<th>
-                @Html.DisplayNameFor(model => model.DateCompleted)
-            </th>-->
-            <th>
-                @Html.DisplayNameFor(model => model.Worker)
-            </th>
 
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deleted)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompletionStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priority)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <!--<td>
-                @Html.DisplayFor(modelItem => item.DateCompleted)
-            </td>-->
-            <td>
-                @Html.DisplayFor(modelItem => item.Worker.FullName)
-            </td>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deleted)
-            </td>
-            <td>
-                    
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+    <div style="display: flex;">
+        @foreach (var status in ViewBag.ComplitionStatuses)
+        {
+            <div class="column-17">
+                <div class="status-box status-@status-color">
+                    <div class="status-name">@status</div>
+                    <img class="file-dock-icon1" src="~/public/@status-icon.svg" />
+                </div>
 
-                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
+                @foreach (var item in Model)
+                {
+                    @if (item.CompletionStatus.Equals(status))
                     {
-                        
-                        <a asp-action="AssignToWorker" asp-route-taskId="@item.Id">Assign to a Worker</a>
+                        <div class="task18">
+                            <div class="task-details-parent16">
+                                <div class="task-details19">
+                                    <b class="broken-door-handle29">@item.Title</b>
+                                    <div class="location-due-date18">
+                                        <div class="room-b-10128">@item.Location</div>
+                                        <b class="b18">•</b>
+                                        <div class="room-b-10128">@item.DueDate</div>
+                                    </div>
+                                    <div class="something-seems-to28">
+                                        @item.Description
+                                    </div>
+                                </div>
+                                <div class="icons31">
+                                    <div class="carpentry66">
+                                        <img class="carpentry-child39" alt="" src="~/public/ellipse-484.svg" />
+                                        <img class="image-2-icon42" alt="" src="~/public/@item.Category-icon.png" />
 
-                        @if (item.Deleted == true)
-                        {
-                            <a asp-action="UndoDelete" asp-route-id="@item.Id">Undo Delete</a>
-                        }
-                        else
-                        {
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        }
+                                    </div>
+                                    <img class="carpentry66" alt="" src="~/public/@item.Priority-priority.svg" />
+                                </div>
+                            </div>
+                            <div class="buttons25">
+
+                                <div class="details49">
+                                    <a class="edit13 buttonInCard" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                </div>
+
+                                <div class="edit12">
+                                    <a class="edit13 buttonInCard" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                </div>
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
+                                {
+                                    <div class="assign8" id="assignContainer">
+                                        <a asp-action="AssignToWorker" asp-route-taskId="@item.Id">Assign to a Worker</a>
+                                    </div>
+
+                                    <div class="edit12">
+                                        @if (item.Deleted == true)
+                                        {
+                                            <a asp-action="UndoDelete" asp-route-id="@item.Id">Undo Delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        }
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
                     }
-                   
 
+                }
 
-            </td>
-        </tr>
-}
-    </tbody>
+            </div>
+        }
+
+    </div>
 </table>
