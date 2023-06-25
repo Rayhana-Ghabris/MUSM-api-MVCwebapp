@@ -18,43 +18,52 @@
 <h1>Tasks List</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-light" asp-action="Create">Create New</a>
 </p>
 
 @using (Html.BeginForm())
 {
     <p>
         SearchBox: @Html.TextBox("SearchString")
-    </p>
-
-    <p>
+  
         Filter By Category: @Html.ListBox("SelectedCategories")
 
         Filter By Priority: @Html.ListBox("SelectedPriority")
     </p>
 
     <p>
-        Show Deleted: @Html.CheckBox("showDeleted")
-        Sort By Oldest: @Html.CheckBox("ascending")
-        Sort By DueDate: @Html.CheckBox("dueDate")
-
+        @Html.CheckBox("showDeleted") Show Deleted
     </p>
+    <p>
+        @Html.CheckBox("ascending") Sort By Oldest
+    </p>
+    <p>
+        @Html.CheckBox("dueDate") Sort By DueDate
+    </p>
+        
+
+    
 
     @if ((await AuthorizationService.AuthorizeAsync(User, "RequireWorkerRole")).Succeeded)
     {
         <p>
-            Show Only My Tasks: @Html.CheckBox("showOnlyMyTasks")
+            @Html.CheckBox("showOnlyMyTasks") Show Only My Tasks
 
         </p>
     }
 
     <p>
-        <input type="submit" value="Search" />
-        <button>
-            @Html.ActionLink("Clear Filter", "Index")
-        </button>
-    </p>
 
+        <form>
+            <button class="btn btn-light" type="submit" value="Search">Search</button>
+
+            <button class="btn btn-light" style="text-decoration:none">
+                @Html.ActionLink("Clear Filter", "Index")
+            </button>
+        </form>
+
+
+    </p>
 }
 <table class="table">
 
