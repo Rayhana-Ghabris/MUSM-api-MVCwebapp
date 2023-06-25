@@ -6,7 +6,7 @@
 <h1>User Roles</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 
 @using (Html.BeginForm())
@@ -25,10 +25,16 @@
     </p>
 
     <p>
-        <input type="submit" value="Search" />
-        <button>
-            @Html.ActionLink("Clear Filter", "Index")
-        </button>
+
+        <form>
+            <button class="btn btn-warning" type="submit" value="Search">Search</button>
+
+            <button class="btn btn-secondary" style="text-decoration:none">
+                @Html.ActionLink("Clear Filter", "Index")
+            </button>
+        </form>
+
+
     </p>
 
 }
@@ -73,12 +79,13 @@
                     @if (@user.Role.Equals("Worker") || @user.Role.Equals("PublicUser"))
                     {
 
-                        <a class="btn btn-primary" asp-controller="Users" asp-action="Edit" asp-route-Id="@user.Id">Edit</a>
-                        <a class="btn btn-primary" asp-controller="Users" asp-action="ChangePassword" asp-route-Id="@user.Id">Change Password</a>
+                        <a class="btn btn-secondary" asp-controller="Users" asp-action="Edit" asp-route-Id="@user.Id">Edit</a>
+                        
+                        <a class="btn btn-danger" asp-controller="Users" asp-action="ChangePassword" asp-route-Id="@user.Id">Change Password</a>
 
                         @if (user.Deleted == false)
                         {
-                            <a class="btn btn-primary" asp-controller="Users" asp-action="Delete" asp-route-Id="@user.Id">Delete</a>
+                            <a class="btn btn-dark" asp-controller="Users" asp-action="Delete" asp-route-Id="@user.Id">Delete</a>
                         }
                         else
                         {

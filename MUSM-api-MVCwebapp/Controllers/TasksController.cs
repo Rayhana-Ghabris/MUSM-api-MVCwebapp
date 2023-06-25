@@ -219,7 +219,7 @@ namespace MUSM_api_MVCwebapp.Controllers
          public async Task<IActionResult> AssignToWorker(int taskId, int requestId )
          {
             var workersList = await _userManager.GetUsersInRoleAsync("Worker");
-            workersList.ElementAt(0);
+            
             ViewData["Workers"] = workersList;
             ViewData["TaskId"] = taskId;
             ViewData["requestId"] = requestId;

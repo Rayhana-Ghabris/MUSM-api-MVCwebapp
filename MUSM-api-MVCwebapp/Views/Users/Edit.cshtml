@@ -35,10 +35,13 @@
                 </label>
             </div>
             <span asp-validation-for="Role" class="text-danger"></span>
+            @if (User.Equals("Worker"))
+            {
 
-            <label asp-for="Speciality" class="control-label">Speciality</label>
-            <div class="form-control">
-                <label>
+
+                <label asp-for="Speciality" class="control-label">Speciality</label>
+                <div class="form-control">
+                    <label>
                     <input type="radio" asp-for="Speciality" value="Electrical" />
                     Electrical
                 </label>
@@ -59,7 +62,7 @@
                     Carpentry
                 </label>
             </div>
-
+}
             <div class="form-group">
                 <input type="submit" value="submit" class="btn btn-primary" />
             </div>
