@@ -1,21 +1,53 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MUSM_api_MVCwebapp.Data
+@using Microsoft.AspNetCore.Authorization
 
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
+@inject IAuthorizationService AuthorizationService
 
 <ul class="navbar-nav">
+     
     @if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-    </li>
-    <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
+    {
+        <li class="nav-item">
+                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+
+        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
+        {
+            
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-page="/Account/Manage/Index" title="List Of Workers">Workers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Requests" title="List Of Requests">Requests</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" title="List Of Tasks">Tasks</a>
+            </li>
+        }
+        else
+        {
+            @if ((await AuthorizationService.AuthorizeAsync(User, "RequireWorkerRole")).Succeeded)
+            {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" title="List Of Tasks">All Tasks</a>
+            </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" title="My Tasks">My Tasks</a>
+                </li>
+            
+            }
+        }
+
+        <li class="nav-item">
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                </form>
+            </li>
+    }
+   
 else
 {
     <li class="nav-item">

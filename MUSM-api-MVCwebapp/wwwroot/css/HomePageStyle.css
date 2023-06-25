@@ -1,0 +1,12 @@
+﻿.text-center {
+    position: center;
+    font-weight: 500;
+    font-family:Tahoma
+}
+
+.main-img {
+    position: center;
+    width: 300px;
+    height: 300px;
+    
+}
