@@ -134,6 +134,7 @@ namespace MUSM_api_MVCwebapp.Controllers
                 FullName = UserRegisterDto.FullName,
                 Email = UserRegisterDto.Email,
                 UserName = UserRegisterDto.Email,
+                Speciality = UserRegisterDto.Speciality,
                 PhoneNumber = "7777777",
                 EmailConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString()
@@ -187,7 +188,8 @@ namespace MUSM_api_MVCwebapp.Controllers
             {
                 FullName = user.FullName,
                 Email = user.Email,
-                Role = userRole[0]
+                Role = userRole[0],
+                Speciality = user.Speciality
             };
           
             return View(userDto);
@@ -209,6 +211,7 @@ namespace MUSM_api_MVCwebapp.Controllers
                     user.FullName = userDto.FullName;
                     user.Email = userDto.Email;
                     user.UserName = userDto.Email;
+                    user.Speciality = userDto.Speciality;
 
                     _context.Entry(user).State = EntityState.Modified;
 

@@ -36,6 +36,29 @@
             </div>
             <span asp-validation-for="Role" class="text-danger"></span>
 
+            <label asp-for="Speciality" class="control-label">Speciality</label>
+            <div class="form-control">
+                <label>
+                    <input type="radio" asp-for="Speciality" value="Electrical" />
+                    Electrical
+                </label>
+                <label>
+                    <input type="radio" asp-for="Speciality" value="Technological" />
+                    Technological
+                </label>
+                <label>
+                    <input type="radio" asp-for="Speciality" value="Plumbing" />
+                    Plumbing
+                </label>
+                <label>
+                    <input type="radio" asp-for="Speciality" value="Construction" />
+                    Construction
+                </label>
+                <label>
+                    <input type="radio" asp-for="Speciality" value="Carpentry" />
+                    Carpentry
+                </label>
+            </div>
 
             <div class="form-group">
                 <input type="submit" value="submit" class="btn btn-primary" />

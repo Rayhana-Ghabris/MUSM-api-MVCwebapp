@@ -8,6 +8,7 @@
         public string Email { get; set; }
         public string Role { get; set; }
 
+        public string? Speciality { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public bool Deleted { get; set; } 
