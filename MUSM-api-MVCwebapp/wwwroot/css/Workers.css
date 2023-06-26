@@ -105,8 +105,8 @@
 }
 
 .undo-evalution6 {
-    border-radius: var(--br-8xs);
-    background-color: var(--gray);
+    border-radius: var(--accepted);
+    background-color: var(--accepted);
     flex-direction: row;
     padding: var(--padding-6xs) var(--padding-xl);
     align-items: center;

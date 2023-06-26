@@ -19,9 +19,7 @@
     {
         <p>
             SearchBox: @Html.TextBox("SearchString")
-        </p>
-
-        <p>
+        
             Filter By Completion Status: @Html.ListBox("SelectedStatuses")
 
             Filter By Category: @Html.ListBox("SelectedCategories")
@@ -30,19 +28,27 @@
         </p>
 
         <p>
+            @Html.CheckBox("ascending") Sort By Oldest
+        </p>
 
-            Sort By Oldest: @Html.CheckBox("ascending")
-            Sort By DueDate: @Html.CheckBox("dueDate")
+        <p>
+            @Html.CheckBox("dueDate")  Sort By DueDate
 
         </p>
 
 
 
         <p>
-            <input type="submit" value="Search" />
-            <button>
-                @Html.ActionLink("Clear Filter", "Index")
-            </button>
+
+            <form>
+                <button class="btn btn-warning" type="submit" value="Search">Search</button>
+
+                <button class="btn btn-secondary" style="text-decoration:none">
+                    @Html.ActionLink("Clear Filter", "Index")
+                </button>
+            </form>
+
+
         </p>
 
     }
@@ -116,8 +122,8 @@
                    
                     <td>
 
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
 
 
                     </td>
@@ -135,5 +141,5 @@ else
 }
 
 <div>
-    <a asp-action="Index" asp-controller="Users" >Back To List</a>
+    <a asp-action="Index" asp-controller="Users" class="btn btn-secondary">Back To List</a>
 </div>

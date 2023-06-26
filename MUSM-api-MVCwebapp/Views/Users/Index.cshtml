@@ -3,25 +3,25 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>User Roles</h1>
+<h1>Users List</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
+    <a asp-action="Create" class="btn btn-outline-success">Create New</a>
 </p>
 
 @using (Html.BeginForm())
 {
     <p>
         SearchBox: @Html.TextBox("SearchString")
-    </p>
-
-    <p>
+   
         Filter By Role: @Html.ListBox("SelectedRoles")
     </p>
 
     <p>
-        Show Deleted: @Html.CheckBox("showDeleted")
-        Sort By Oldest: @Html.CheckBox("ascending")
+        @Html.CheckBox("showDeleted") Show Deleted
+    </p>
+    <p>
+        @Html.CheckBox("ascending") Sort By Oldest
     </p>
 
     <p>
@@ -29,7 +29,7 @@
         <form>
             <button class="btn btn-warning" type="submit" value="Search">Search</button>
 
-            <button class="btn btn-secondary" style="text-decoration:none">
+            <button class="btn btn-outline-secondary" style="text-decoration:none">
                 @Html.ActionLink("Clear Filter", "Index")
             </button>
         </form>
@@ -72,25 +72,25 @@
                     @if (@user.Role.Equals("Worker"))
                     {
 
-                        <a class="btn btn-primary" asp-controller="Tasks" asp-action="TasksOfWorker" asp-route-workerId="@user.Id">Show Assigned Tasks</a>
+                        <a class="btn btn-outline-info" asp-controller="Tasks" asp-action="TasksOfWorker" asp-route-workerId="@user.Id">Show Assigned Tasks</a>
                     }
 
 
                     @if (@user.Role.Equals("Worker") || @user.Role.Equals("PublicUser"))
                     {
 
-                        <a class="btn btn-secondary" asp-controller="Users" asp-action="Edit" asp-route-Id="@user.Id">Edit</a>
-                        
-                        <a class="btn btn-danger" asp-controller="Users" asp-action="ChangePassword" asp-route-Id="@user.Id">Change Password</a>
+                        <a class="btn btn-outline-secondary" asp-controller="Users" asp-action="Edit" asp-route-Id="@user.Id">Edit</a>
+
+                        <a class="btn btn-outline-danger" asp-controller="Users" asp-action="ChangePassword" asp-route-Id="@user.Id">Change Password</a>
 
                         @if (user.Deleted == false)
                         {
-                            <a class="btn btn-dark" asp-controller="Users" asp-action="Delete" asp-route-Id="@user.Id">Delete</a>
+                            <a class="btn btn-outline-dark" asp-controller="Users" asp-action="Delete" asp-route-Id="@user.Id">Delete</a>
                         }
                         else
                         {
 
-                            <a class="btn btn-primary" asp-controller="Users" asp-action="UndoDelete" asp-route-Id="@user.Id">UndoDelete</a>
+                            <a class="btn btn-outline-info" asp-controller="Users" asp-action="UndoDelete" asp-route-Id="@user.Id">UndoDelete</a>
 
                         }
                     }

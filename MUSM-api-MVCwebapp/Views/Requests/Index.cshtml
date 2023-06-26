@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="~/css/requests.css" />
 </head>
 
-<h1>Index</h1>
+<h1>Requests List</h1>
 
 @using (Html.BeginForm())
 {
@@ -39,7 +39,7 @@
         <form>
             <button class="btn btn-warning" type="submit" value="Search">Search</button>
 
-            <button class="btn btn-secondary" style="text-decoration:none">
+            <button class="btn btn-outline-secondary" style="text-decoration:none">
                 @Html.ActionLink("Clear Filter", "Index")
             </button>
         </form>
@@ -71,10 +71,12 @@
                                     <div class="location-due-date18">
                                         <div class="room-b-10128">@item.Location</div>
                                         <b class="b18">•</b>
+                                        votes: @item.VotesCount
                                     </div>
                                     <div class="something-seems-to28">
                                         @item.Description
                                     </div>
+                                 
                                 </div>
                                 
                             </div>

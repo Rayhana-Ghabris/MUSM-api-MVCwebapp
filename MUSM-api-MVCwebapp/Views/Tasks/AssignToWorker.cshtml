@@ -17,7 +17,7 @@
 
 <h1>Workers</h1>
 
-<a asp-action="Index">No Need To Assign A Worker</a>
+<a asp-action="Index" class="btn btn-warning" >No Need To Assign A Worker</a>
 
 @if (ViewBag.Workers != null && ViewBag.Workers.Count > 0)
 {
@@ -59,9 +59,9 @@
                                      alt=""
                                      src="~/public/image-81@2x.png" />
                             </div>
-                            <div class="undo-evalution6">
+                            <div >
 
-                                <a class="btn btn-primary" asp-action="AssignToWorkerConfirmed" asp-route-WorkerId="@ViewBag.Workers[i].Id" asp-route-taskId="@ViewBag.TaskId">Select</a>
+                                <a class="btn btn-success" asp-action="AssignToWorkerConfirmed" asp-route-WorkerId="@ViewBag.Workers[i].Id" asp-route-taskId="@ViewBag.TaskId">Select</a>
 
                             </div>
                         </div>
@@ -104,9 +104,9 @@
                                      alt=""
                                      src="~/public/image-81@2x.png" />
                             </div>
-                            <div class="undo-evalution6">
+                            <div >
 
-                                <a class="btn btn-primary" asp-action="AssignToWorkerConfirmed" asp-route-WorkerId="@ViewBag.Workers[i].Id" asp-route-taskId="@ViewBag.TaskId">Select</a>
+                                <a class="btn btn-success" asp-action="AssignToWorkerConfirmed" asp-route-WorkerId="@ViewBag.Workers[i].Id" asp-route-taskId="@ViewBag.TaskId">Select</a>
 
                             </div>
                         </div>
@@ -154,11 +154,11 @@
 
     @if (ViewBag.requestId == 0)
     {
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" class="btn btn-warning">Back to List</a>
     }
     else
     {
-        <a asp-action="Index" asp-controller="Requests">Back to List</a>
+        <a asp-action="Index" asp-controller="Requests" class="btn btn-warning" >Back to List</a>
 
     }
 
