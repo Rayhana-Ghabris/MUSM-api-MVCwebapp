@@ -7,6 +7,8 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<link rel="stylesheet" href="~/css/global.css" />
+<link rel="stylesheet" href="~/css/EditTask.css" />
 
 <h1>Edit</h1>
 
@@ -19,11 +21,14 @@
             {
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
+
                 <div class="form-group">
                     <label asp-for="Title" class="control-label"></label>
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
+               
+
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
                     <input asp-for="Description" class="form-control" />
@@ -98,11 +103,11 @@
                         Assigned
                     </label>
                     <label>
-                        <input type="radio" asp-for="CompletionStatus" value="In Progress" />
+                        <input type="radio" asp-for="CompletionStatus" value="InProgress" />
                         In Progress
                     </label>
                     <label>
-                        <input type="radio" asp-for="CompletionStatus" value="On Hold" />
+                        <input type="radio" asp-for="CompletionStatus" value="OnHold" />
                         On Hold
                     </label>
                     <label>
@@ -118,14 +123,14 @@
             @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
             {
                 <div class="form-group">
-                    <input type="submit" value="Next" class="btn btn-primary" />
+                    <input type="submit" value="Next" class="btn btn-warning" />
                 </div>
 
             }
             else
             {
                 <div class="form-group">
-                    <input type="submit" value="submit" class="btn btn-primary" />
+                    <input type="submit" value="submit" class="btn btn-warning" />
                 </div>
             }
            
@@ -136,7 +141,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Cancel</a>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </div>
 
 @section Scripts {

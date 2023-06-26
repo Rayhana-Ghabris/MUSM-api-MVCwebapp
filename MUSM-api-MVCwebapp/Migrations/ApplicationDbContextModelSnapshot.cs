@@ -160,7 +160,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "7005685e-515b-441f-ab72-355724c1c40a",
+                            UserId = "6176fbe8-1ae1-43ae-b924-ff2470a27164",
                             RoleId = "1"
                         });
                 });
@@ -241,6 +241,9 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Speciality")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -263,10 +266,10 @@ namespace MUSM_api_MVCwebapp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7005685e-515b-441f-ab72-355724c1c40a",
+                            Id = "6176fbe8-1ae1-43ae-b924-ff2470a27164",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dc86df47-94bb-476a-894d-ca25e14c9813",
-                            CreatedAt = new DateTime(2023, 6, 25, 10, 14, 31, 622, DateTimeKind.Local).AddTicks(4589),
+                            ConcurrencyStamp = "dda74664-2a65-45aa-8c3b-34a1239fa84f",
+                            CreatedAt = new DateTime(2023, 6, 25, 19, 43, 25, 715, DateTimeKind.Local).AddTicks(1303),
                             Deleted = false,
                             Email = "manager@mu.edu.lb",
                             EmailConfirmed = true,
@@ -277,7 +280,7 @@ namespace MUSM_api_MVCwebapp.Migrations
                             PasswordHash = "AQAAAAEAACcQAAAAEC6rK5TRHGeXrJ1LtZFyKXDq+6XCQmxvYV0BDp2P10JESYdtA/EUBHqT3WXouCLDCA==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "df5d5050-1d62-41ac-b174-3232131655ef",
+                            SecurityStamp = "5adf3fc8-95cb-4741-a630-e03da8cb237b",
                             TwoFactorEnabled = false,
                             UserName = "manager@mu.edu.lb"
                         });

@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  line-height: normal;
+}
+
+
+
+:root {
+  /* fonts */
+  --font-poppins: Poppins;
+  --sp-h3-heading: Inter;
+  --font-noto-sans: "Noto Sans";
+  --font-roboto: Roboto;
+
+  /* font sizes */
+  --font-size-xl: 20px;
+  --font-size-5xl: 24px;
+  --sp-h3-heading-size: 48px;
+  --font-size-sm: 14px;
+  --font-size-lg: 18px;
+  --font-size-base: 16px;
+  --font-size-7xl: 26px;
+  --font-size-xs: 12px;
+  --font-size-4xs: 9px;
+  --font-size-3xs: 10px;
+  --font-size-mini: 15px;
+  --font-size-9xl: 28px;
+  --font-size-2xs: 11px;
+
+  /* Colors */
+  --white: #fff;
+  --gray: #757575;
+  --black: #1e1e1e;
+  --color-gray-100: #111;
+  --color-gray-200: rgba(255, 255, 255, 0.7);
+  --color-darkslategray-100: #403937;
+  --color-darkslategray-200: #33363f;
+  --color-darkslategray-300: #333;
+  --color-darkslategray-400: #303030;
+  --color-dimgray-100: #756966;
+  --color-dimgray-200: #666;
+  --color-dimgray-300: rgba(102, 102, 102, 0.25);
+  --rejected: #ec2c2c;
+  --color-crimson-100: #ee1d52;
+  --color-whitesmoke: #f6f6f6;
+  --accepted: #0dae0a;
+  --color-black: #000;
+  --color-lightgray-100: #d4d4d4;
+  --color-lightgray-200: #ccc;
+  --color-darkorange: #ff7a00;
+  --color-red: #ea1e1e;
+  --color-blueviolet-100: #7c3aed;
+  --color-blueviolet-200: #384bf3;
+  --color-lightseagreen: #1fbaa2;
+  --color-thistle: #e2d6ff;
+  --color-coral: #f37b38;
+
+  /* Gaps */
+  --gap-5xl: 24px;
+  --gap-9xs: 4px;
+  --gap-35xl: 54px;
+  --gap-11xl: 30px;
+  --gap-29xl: 48px;
+  --gap-xl: 20px;
+  --gap-96xl: 115px;
+  --gap-3xs: 10px;
+  --gap-mini: 15px;
+  --gap-6xs: 7px;
+  --gap-5xs: 8px;
+  --gap-8xs: 5px;
+
+  /* Paddings */
+  --padding-mini: 15px;
+  --padding-xl: 20px;
+  --padding-6xs: 7px;
+  --padding-7xs: 6px;
+  --padding-8xs: 5px;
+  --padding-6xl: 25px;
+  --padding-3xs: 10px;
+  --padding-base: 16px;
+  --padding-9xs: 4px;
+  --padding-5xl: 24px;
+  --padding-5xs: 8px;
+
+  /* border radiuses */
+  --br-980xl: 999px;
+  --br-xs: 12px;
+  --br-3xs: 10px;
+  --br-8xs: 5px;
+  --br-5xs: 8px;
+
+  /* Effects */
+  --dp-dark-shadow: 0px 2px 4px rgba(38, 50, 56, 0.16),
+    0px 4px 8px rgba(38, 50, 56, 0.08);
+}
