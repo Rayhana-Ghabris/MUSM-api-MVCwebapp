@@ -26,7 +26,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         private readonly IMapper _mapper;
 
         private readonly List<string> CompletionStatuses = new List<string> {
-            "Open","Assigned","InProgress", "OnHold", "Done"
+            "Open","Assigned","In Progress", "On Hold", "Done"
         };
 
         private readonly List<string> Priority = new List<string> {
