@@ -21,6 +21,7 @@ namespace MUSM_api_MVCwebapp.Models
         public string? Location { get; set; }
 
         [StringLength(256, ErrorMessage = "Maximum length for title is {1}")]
+        [Display(Name = "Completion Status")]
         public string? CompletionStatus { get; set; } = "Open";
 
         [Required]
@@ -31,8 +32,10 @@ namespace MUSM_api_MVCwebapp.Models
         [StringLength(256, ErrorMessage = "Maximum length for title is {1}")]
         public string? Category { get; set; }
 
-        public DateTime? DueDate { get; set; } 
+        [Display(Name = "Due Date")]
+        public DateTime? DueDate { get; set; }
 
+        [Display(Name = "Date Completed")]
         public DateTime? DateCompleted { get; set; }
         
         [StringLength(450, ErrorMessage = "Maximum length for title is {1}")]
@@ -48,7 +51,7 @@ namespace MUSM_api_MVCwebapp.Models
         [ForeignKey("RequestId")]
         public RequestModel? Request { get; set; }
 
-        //new
+        [Display(Name = "Created At")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
        
         public bool Deleted { get; set; } = false;

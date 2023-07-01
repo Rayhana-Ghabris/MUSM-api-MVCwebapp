@@ -12,16 +12,18 @@
     <meta name="viewport" content="initial-scale=1, width=device-width" />
     <link rel="stylesheet" href="~/css/global.css" />
     <link rel="stylesheet" href="~/css/requests.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<h1>Requests List</h1>
+<h1 style="color: lightseagreen">Requests List</h1>
+<br />
 
 @using (Html.BeginForm())
 {
     <p>
-        SearchBox: @Html.TextBox("SearchString")
-    
-        Filter By Approval Status: @Html.ListBox("SelectedStatuses")
+        <i class="fa fa-search"></i> @Html.TextBox("SearchString") &nbsp
+
+        <i class="fa fa-filter"></i> By Approval Status: @Html.DropDownList("SelectedStatuses")
 
        
     </p>
@@ -37,7 +39,7 @@
     <p>
 
         <form>
-            <button class="btn btn-warning" type="submit" value="Search">Search</button>
+            <button class="btn btn-warning" type="submit" value="Search"><i class="fa fa-search"></i> Search</button>
 
             <button class="btn btn-outline-secondary" style="text-decoration:none">
                 @Html.ActionLink("Clear Filter", "Index")

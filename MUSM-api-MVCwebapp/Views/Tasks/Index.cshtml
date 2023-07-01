@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims;
 
 @inject IAuthorizationService AuthorizationService
 
@@ -13,22 +14,25 @@
     <meta name="viewport" content="initial-scale=1, width=device-width" />
     <link rel="stylesheet" href="~/css/global.css" />
     <link rel="stylesheet" href="~/css/AllTasks.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<h1>Tasks List</h1>
+<h1 style="color: lightseagreen">Tasks List  <a asp-action="Create" class="btn btn-outline-success"><i class="fa fa-plus"></i></a></h1>
 
-<p>
-    <a class="btn btn-outline-success" asp-action="Create">Create New</a>
-</p>
+<br />
 
 @using (Html.BeginForm())
 {
     <p>
-        SearchBox: @Html.TextBox("SearchString")
-  
-        Filter By Category: @Html.ListBox("SelectedCategories")
+        <form action="/action_page.php">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+        @*<i class="fa fa-search"></i> @Html.TextBox("SearchString") &nbsp*@
 
-        Filter By Priority: @Html.ListBox("SelectedPriority")
+        <i class="fa fa-filter"></i> By Category: @Html.DropDownList("SelectedCategories") &nbsp
+
+        <i class="fa fa-filter"></i> By Priority: @Html.ListBox("SelectedPriority")
     </p>
 
     <p>
@@ -55,7 +59,7 @@
     <p>
 
         <form>
-            <button class="btn btn-warning" type="submit" value="Search">Search</button>
+            <button class="btn btn-warning" type="submit" value="Search"><i class="fa fa-search"></i> Search</button>
 
             <button class="btn btn-outline-secondary" style="text-decoration:none">
                 @Html.ActionLink("Clear Filter", "Index")
@@ -107,16 +111,28 @@
                                 <div class="details49">
                                     <a class="edit13 buttonInCard" asp-action="Details" asp-route-id="@item.Id">Details</a>
                                 </div>
-
-                                <div class="edit12">
-                                    <a class="edit13 buttonInCard" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                </div>
-
+                                @if (User.FindFirst(ClaimTypes.NameIdentifier).Value.Equals(item.WorkerId) ||
+                                (await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
+                                {
+                                    <div class="edit12">
+                                        <a class="edit13 buttonInCard" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    </div>
+                                }
+                               
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
                                 {
-                                    <div class="assign8" id="assignContainer">
-                                        <a asp-action="AssignToWorker" asp-route-taskId="@item.Id">Assign to a Worker</a>
-                                    </div>
+                                    @if (item.CompletionStatus.Equals("Open"))
+                                    {
+                                        <div class="assign8" id="assignContainer">
+                                            <a asp-action="AssignToWorker" asp-route-taskId="@item.Id">Assign a Worker</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="assign8" id="assignContainer">
+                                            <a asp-action="AssignToWorker" asp-route-taskId="@item.Id">Delegate</a>
+                                        </div>
+                                    }
 
                                     <div class="edit12">
                                         @if (item.Deleted == true)

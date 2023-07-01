@@ -211,7 +211,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 
       
 
-         #region GET: AssignToWorker
+        #region GET: AssignToWorker
          // GET: AssignToWorker
          //[HttpGet("[action]/{requestModel}")]
 
@@ -229,7 +229,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         #endregion
 
       
-        #region GET: AssignToWorker
+        #region AssignToWorker
         [Authorize(Policy = "RequireManagerRole")]
          
          public async Task<IActionResult> AssignToWorkerConfirmed(int taskId, string WorkerId)

@@ -13,11 +13,30 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto Sans:wght@400&display=swap" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-<h1>Workers</h1>
+<h1 style="color: mediumturquoise"> <i class="fa fa-users"></i> Workers</h1>
 
-<a asp-action="Index" class="btn btn-warning" >No Need To Assign A Worker</a>
+<a asp-action="Index" class="btn btn-outline-warning" >No Need To Assign A Worker</a>
+<div>
+    <br />
+
+    @if (ViewBag.requestId == 0)
+    {
+        <a asp-action="Index" class="btn btn-warning">Back to List</a>
+    }
+    else
+    {
+        <a asp-action="Index" asp-controller="Requests" class="btn btn-warning">Back to List</a>
+
+    }
+
+
+</div>
+
+
+<hr />
 
 @if (ViewBag.Workers != null && ViewBag.Workers.Count > 0)
 {
@@ -150,7 +169,7 @@
 </table>*@
 
 <div>
-
+    <br />
 
     @if (ViewBag.requestId == 0)
     {

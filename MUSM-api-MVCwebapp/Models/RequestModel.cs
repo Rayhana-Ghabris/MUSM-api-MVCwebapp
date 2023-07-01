@@ -17,6 +17,7 @@ namespace MUSM_api_MVCwebapp.Models
         [StringLength(256, ErrorMessage = "Maximum length for title is {1}")]
         public string? Description { get; set; }
 
+        [Display(Name = "Approval Status")]
         public string ApprovalStatus { get; set; } = "Under Evaluation";
 
         [Required]
@@ -39,13 +40,17 @@ namespace MUSM_api_MVCwebapp.Models
        //new 
         public TaskModel? Task { get; set; }
 
+        [Display(Name = "Created At")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
 
         public bool Deleted { get; set; } = false;
 
         [NotMapped]
+        [Display(Name = "Votes Count")]
         public int? VotesCount { get; set; }
-  
+        
+
 
     }
 }
