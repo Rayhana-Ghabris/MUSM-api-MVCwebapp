@@ -72,12 +72,21 @@
 <table class="table">
 
     <div style="display: flex;">
+        
         @foreach (var status in ViewBag.ComplitionStatuses)
         {
+            var nospace = status;
+            if (status.Equals("In Progress")){
+                nospace = "InProgress";
+            }else if(status.Equals("On Hold"))
+            {
+                nospace = "OnHold";
+            }
+
             <div class="column-17">
-                <div class="status-box status-@status-color">
+                <div class="status-box status-@nospace-color">
                     <div class="status-name">@status</div>
-                    <img class="file-dock-icon1" src="~/public/@status-icon.svg" />
+                    <img class="file-dock-icon1" src="~/public/@nospace-icon.svg" />
                 </div>
 
                 @foreach (var item in Model)
