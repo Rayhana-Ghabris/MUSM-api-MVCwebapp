@@ -30,7 +30,8 @@ namespace MUSM_api_MVCwebapp.Services
             string path = _environment.ContentRootPath + "\\Media\\" + category + "\\";
 
             // To save in Media path field
-            var filePath = Path.Combine(path, Path.GetRandomFileName());
+            var filePath = Path.Combine(path, Path.GetFileName(objFile.files.FileName)
+);
 
             try
             {
