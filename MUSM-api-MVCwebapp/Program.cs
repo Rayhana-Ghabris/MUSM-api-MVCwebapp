@@ -92,6 +92,9 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddTransient<VotesService>();
 
+// Media Service
+builder.Services.AddTransient<MediaService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

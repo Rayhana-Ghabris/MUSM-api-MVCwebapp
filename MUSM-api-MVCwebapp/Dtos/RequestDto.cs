@@ -15,7 +15,9 @@ namespace MUSM_api_MVCwebapp.Dtos
 
         public string? Location { get; set; }
 
-        public string? Photo { get; set; }
+        public int? PhotoId { get; set; }       
+
+        public Picture? Photo { get; set; }
 
         public string? Category { get; set; }
 

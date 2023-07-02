@@ -24,7 +24,13 @@ namespace MUSM_api_MVCwebapp.Models
         [StringLength(256, ErrorMessage = "Maximum length for title is {1}")]
         public string? Location { get; set; }
 
-        public string? Photo { get; set; }
+        [Range(0, 1000000000)]
+        public int? PhotoId { get; set; }
+        [Display(Name = "Photo")]
+
+        [ForeignKey("PhotoId")]
+        public Picture? Photo { get; set; }
+
 
         [StringLength(256, ErrorMessage = "Maximum length for title is {1}")]
         public string? Category { get; set; }

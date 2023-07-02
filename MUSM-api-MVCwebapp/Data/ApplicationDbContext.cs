@@ -71,6 +71,7 @@ namespace MUSM_api_MVCwebapp.Data
                 .WithOne(e => e.Task)
                 .OnDelete(DeleteBehavior.Restrict);
 
+           
 
 
 
@@ -83,6 +84,8 @@ namespace MUSM_api_MVCwebapp.Data
         public DbSet<RequestModel> Requests { get; set; }
         public DbSet<TaskModel> Tasks { get; set; }
         public DbSet<VoteModel> Votes { get; set; }
+
+        public DbSet<Picture> Pictures { get; set; }
 
 
     }

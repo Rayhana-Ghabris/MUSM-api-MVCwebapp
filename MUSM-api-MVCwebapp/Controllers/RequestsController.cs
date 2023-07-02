@@ -22,6 +22,8 @@ namespace MUSM_api_MVCwebapp.Controllers
 
         private readonly VotesService _votesService;
 
+        private readonly MediaService _mediaService;
+
         private readonly List<string> ApprovalStatuses = new List<string> {
             "Approved","Rejected","Under Evaluation"
         };
@@ -30,11 +32,12 @@ namespace MUSM_api_MVCwebapp.Controllers
             "Electrical","Technological","Plumbing","Construction","Carpentry"
         };
 
-        public RequestsController(ApplicationDbContext context, UserManager<AppUser> userManager, VotesService votesService)
+        public RequestsController(ApplicationDbContext context, UserManager<AppUser> userManager, VotesService votesService, MediaService mediaService)
         {
             _context = context;
             _userManager = userManager;
             _votesService = votesService;
+            _mediaService = mediaService;
         }
 
 
@@ -126,6 +129,7 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             var requestModel = await _context.Requests
                 .Include(r => r.PublicUser)
+                .Include(p => p.Photo)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (requestModel == null)
             {
@@ -174,7 +178,7 @@ namespace MUSM_api_MVCwebapp.Controllers
             if (requestModel != null)
             {
 
-                requestModel.ApprovalStatus = "Reject";
+                requestModel.ApprovalStatus = "Rejected";
 
                 _context.Entry(requestModel).State = EntityState.Modified;
 
@@ -202,6 +206,19 @@ namespace MUSM_api_MVCwebapp.Controllers
                 requestModel.ApprovalStatus  = "Under Evaluation";
 
                 _context.Entry(requestModel).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+            }
+
+            var task = await _context.Tasks.Where(t => t.RequestId == id).FirstAsync();
+
+            if (task != null)
+            {
+                task.RequestId = null;
+                task.Deleted = true;
+                task.WorkerId = null;
+
+                _context.Entry(task).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
             }
@@ -297,6 +314,7 @@ namespace MUSM_api_MVCwebapp.Controllers
         {
             return RedirectToAction(nameof(Index));
         }
+
 
 
     }
