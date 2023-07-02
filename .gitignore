@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MUSM-api-MVCwebapp/Areas/Identity/Pages/Account/PersonalData.cshtml
+/MUSM-api-MVCwebapp/Areas/Identity/Pages/Account/PersonalData.cshtml.cs
