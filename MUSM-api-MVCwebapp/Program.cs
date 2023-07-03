@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MUSM_api_MVCwebapp.Data;
 using MUSM_api_MVCwebapp.Helpers;
@@ -92,6 +93,9 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddTransient<VotesService>();
 
+// Media Service
+builder.Services.AddTransient<MediaService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -102,8 +106,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "Media")),
+    RequestPath = "/Media"
+});
 
 app.UseRouting();
 
