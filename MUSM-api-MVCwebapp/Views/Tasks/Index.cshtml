@@ -17,20 +17,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<h1 style="color: lightseagreen">Tasks List  <a asp-action="Create" class="btn btn-outline-success"><i class="fa fa-plus"></i></a></h1>
+<h1 style="color: lightseagreen">Tasks List  &nbsp<a asp-action="Create" style="border-radius:50%" class="btn btn-outline-warning"><i class="fa fa-plus"></i></a></h1>
 
-<br />
+
 
 @using (Html.BeginForm())
 {
     <p>
-        <form action="/action_page.php">
+        @*<form action="/action_page.php">
             <input type="text" placeholder="Search.." name="search">
             <button type="submit"><i class="fa fa-search"></i></button>
-        </form>
-        @*<i class="fa fa-search"></i> @Html.TextBox("SearchString") &nbsp*@
+        </form>*@
+        @Html.TextBox("SearchString")<i class="fa fa-search btn btn-light"></i> &nbsp &nbsp
 
-        <i class="fa fa-filter"></i> By Category: @Html.DropDownList("SelectedCategories") &nbsp
+        <i class="fa fa-filter"></i> By Category: @Html.ListBox("SelectedCategories") &nbsp
 
         <i class="fa fa-filter"></i> By Priority: @Html.ListBox("SelectedPriority")
     </p>

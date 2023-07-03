@@ -3,32 +3,40 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<h1 style="color: lightseagreen">Users List <a asp-action="Create" class="btn btn-outline-success" ><i class="fa fa-plus"></i></a></h1>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/User.css" />
+</head>
 
-<br />
+<h1 style="color: lightseagreen">Users List &nbsp<a asp-action="Create" style="border-radius:50%" class="btn btn-outline-success"><i class="fa fa-plus"></i></a></h1>
+
+
 
 @using (Html.BeginForm())
 {
     <p>
-        <i class="fa fa-search"></i> @Html.TextBox("SearchString")&nbsp
+        @Html.TextBox("SearchString")<i class="fa fa-search btn btn-light"></i> &nbsp &nbsp
 
-        <i class="fa fa-filter"></i> By Role: @Html.DropDownList("SelectedRoles")
-        
+        <i class="fa fa-filter"></i> By Role: @Html.ListBox("SelectedRoles")
+       
     </p>
 
     <p>
         @Html.CheckBox("showDeleted") Show Deleted
     </p>
+
     <p>
         @Html.CheckBox("ascending") Sort By Oldest
     </p>
 
+    
     <p>
 
         <form>
-            <button class="btn btn-warning" type="submit" value="Search"><i class="fa fa-search"></i> Search</button>
+            <button class="btn btn-warning" type="submit" value="Search"><i class="fa fa-search"></i>Search</button>
 
             <button class="btn btn-outline-secondary" style="text-decoration:none">
                 @Html.ActionLink("Clear Filter", "Index")
@@ -44,11 +52,11 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>FullName</th>
+            <th>Full Name</th>
             <th>Email</th>
             <th>Role</th>
             <th>Speciality</th>
-            <th>CreatedAt</th>
+            <th>Created At</th>
             <th>@Html.DisplayNameFor(user => user.Deleted)</th>
             <th>Actions</th>
 
@@ -74,25 +82,25 @@
                     @if (@user.Role.Equals("Worker"))
                     {
 
-                        <a class="btn btn-outline-info" asp-controller="Tasks" asp-action="TasksOfWorker" asp-route-workerId="@user.Id"><i class="fa fa-book"> Assigned Tasks </i></a>
+                        <a class="btn btn-outline-info" asp-controller="Tasks" data-toggle="tooltip" data-placement="top" title="Show Assigned Tasks" asp-action="TasksOfWorker" asp-route-workerId="@user.Id"><i class="fa fa-list"></i></a>
                     }
 
 
                     @if (@user.Role.Equals("Worker") || @user.Role.Equals("PublicUser"))
                     {
 
-                        <a class="btn btn-outline-secondary" asp-controller="Users" asp-action="Edit" asp-route-Id="@user.Id"><i class="fa fa-edit"></i></a>
+                        <a class="btn btn-outline-secondary" asp-controller="Users" asp-action="Edit" asp-route-Id="@user.Id" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
 
-                        <a class="btn btn-outline-dark" asp-controller="Users" asp-action="ChangePassword" asp-route-Id="@user.Id"><i class="fa fa-pencil"></i>Password</a>
+                        <a class="btn btn-outline-dark" asp-controller="Users" asp-action="ChangePassword" asp-route-Id="@user.Id" data-toggle="tooltip" data-placement="top" title="Change Password"><i class="fa fa-lock"></i></a>
 
                         @if (user.Deleted == false)
                         {
-                            <a class="btn btn-outline-danger" asp-controller="Users" asp-action="Delete" asp-route-Id="@user.Id"><i class="fa fa-trash"></i></a>
+                            <a class="btn btn-outline-danger" asp-controller="Users" asp-action="Delete" asp-route-Id="@user.Id" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
                         }
                         else
                         {
 
-                            <a class="btn btn-outline-danger" asp-controller="Users" asp-action="UndoDelete" asp-route-Id="@user.Id">Undo<i class="fa fa-trash"></i></a>
+                            <a class="btn btn-outline-danger" asp-controller="Users" asp-action="UndoDelete" asp-route-Id="@user.Id" data-toggle="tooltip" data-placement="top" title="Undo Delete"><i class="fa fa-undo"></i></a>
 
                         }
                     }
@@ -101,3 +109,4 @@
         }
     </tbody>
 </table>
+

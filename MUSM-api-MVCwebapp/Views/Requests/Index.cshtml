@@ -21,9 +21,9 @@
 @using (Html.BeginForm())
 {
     <p>
-        <i class="fa fa-search"></i> @Html.TextBox("SearchString") &nbsp
+        @Html.TextBox("SearchString")<i class="fa fa-search btn btn-light"></i> &nbsp &nbsp
 
-        <i class="fa fa-filter"></i> By Approval Status: @Html.DropDownList("SelectedStatuses")
+        <i class="fa fa-filter"></i> By Approval Status: @Html.ListBox("SelectedStatuses")
 
        
     </p>

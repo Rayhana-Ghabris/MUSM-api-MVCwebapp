@@ -90,7 +90,7 @@
     </dl>
 </div>
 <div>
-    @if (User.FindFirst(ClaimTypes.NameIdentifier).Value.Equals(@Html.DisplayNameFor(model => model.Worker.Id)) ||
+    @if (User.FindFirst(ClaimTypes.NameIdentifier).Value.Equals(Model.WorkerId) ||
                   (await AuthorizationService.AuthorizeAsync(User, "RequireManagerRole")).Succeeded)
     {
         <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-danger">Edit</a>

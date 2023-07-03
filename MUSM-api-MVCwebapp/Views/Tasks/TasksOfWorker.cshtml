@@ -7,24 +7,24 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 @if (Model.Count() > 0 && Model != null)
 {
-    <h1>Tasks Of @Model.ElementAt(0).Worker.FullName</h1>
+    <h1 style="color:gray" >Tasks Of @Model.ElementAt(0).Worker.FullName</h1>
 
 
     @using (Html.BeginForm())
     {
         <p>
-            SearchBox: @Html.TextBox("SearchString")
-        
-            Filter By Completion Status: @Html.ListBox("SelectedStatuses")
+            <i class="fa fa-search"></i> SearchBox: @Html.TextBox("SearchString")
 
-            Filter By Category: @Html.ListBox("SelectedCategories")
+            <i class="fa fa-filter"></i> By Completion Status: @Html.ListBox("SelectedStatuses")
 
-            Filter By Priority: @Html.ListBox("SelectedPriority")
+            <i class="fa fa-filter"></i> By Category: @Html.ListBox("SelectedCategories")
+
+            <i class="fa fa-filter"></i> By Priority: @Html.ListBox("SelectedPriority")
         </p>
 
         <p>
@@ -41,9 +41,9 @@
         <p>
 
             <form>
-                <button class="btn btn-warning" type="submit" value="Search">Search</button>
+                <button class="btn btn-warning" type="submit" value="Search"><i class="fa fa-search"></i> Search</button>
 
-                <button class="btn btn-secondary" style="text-decoration:none">
+                <button class="btn btn-outline-secondary" style="text-decoration:none">
                     @Html.ActionLink("Clear Filter", "Index")
                 </button>
             </form>
@@ -83,7 +83,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.CreatedAt)
                 </th>
-                <th></th>
+                <th>
+                    Actions
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -121,10 +123,10 @@
                     </td>
                    
                     <td>
-
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
-
+                        
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-success">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+                        
 
                     </td>
                 </tr>
@@ -141,5 +143,5 @@ else
 }
 
 <div>
-    <a asp-action="Index" asp-controller="Users" class="btn btn-secondary">Back To List</a>
+    <a asp-action="Index" asp-controller="Users" class="btn btn-outline-secondary">Back To List</a>
 </div>

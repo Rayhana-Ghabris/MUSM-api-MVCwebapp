@@ -243,9 +243,12 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             task.WorkerId = WorkerId;
 
+            task.CompletionStatus = "Assigned";
+
             _context.Entry(task).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
+
 
             return RedirectToAction("Index");
          }
