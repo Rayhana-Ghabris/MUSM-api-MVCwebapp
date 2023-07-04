@@ -199,6 +199,23 @@ namespace MUSM_api_MVCwebapp.Controllers
 
             if (requestModel != null)
             {
+                if(requestModel.ApprovalStatus == "Approved")
+                {
+                    var task = await _context.Tasks.Where(t => t.RequestId == id).FirstAsync();
+
+                    if (task != null)
+                    {
+                        task.RequestId = null;
+                        task.Deleted = true;
+                        task.WorkerId = null;
+
+                        _context.Entry(task).State = EntityState.Modified;
+
+                        await _context.SaveChangesAsync();
+                    }
+
+                }
+
                 requestModel.ApprovalStatus  = "Under Evaluation";
 
                 _context.Entry(requestModel).State = EntityState.Modified;
@@ -206,18 +223,7 @@ namespace MUSM_api_MVCwebapp.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            var task = await _context.Tasks.Where(t => t.RequestId == id).FirstAsync();
-
-            if (task != null)
-            {
-                task.RequestId = null;
-                task.Deleted = true;
-                task.WorkerId = null;
-
-                _context.Entry(task).State = EntityState.Modified;
-
-                await _context.SaveChangesAsync();
-            }
+           
 
             return RedirectToAction(nameof(Index));
 
